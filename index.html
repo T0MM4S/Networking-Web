@@ -701,6 +701,61 @@
     font-size: 0.84rem;
   }
 
+  .checksum-analytics {
+    margin-top: 12px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: #0a1220;
+    padding: 12px;
+  }
+
+  .checksum-analytics h3 {
+    margin: 0 0 10px;
+    font-size: 1rem;
+    color: var(--accent);
+    font-family: 'Syne', sans-serif;
+  }
+
+  .checksum-hex-map {
+    display: grid;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .checksum-hex-row {
+    background: rgba(15, 23, 42, 0.65);
+    border: 1px solid rgba(0,212,255,0.16);
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.82rem;
+    color: #dbeafe;
+  }
+
+  .checksum-stack {
+    border: 1px dashed rgba(148, 163, 184, 0.35);
+    border-radius: 8px;
+    padding: 10px;
+    background: rgba(2, 8, 24, 0.55);
+  }
+
+  .checksum-stack-line {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.84rem;
+    color: #b7c9db;
+    white-space: pre;
+    transition: color 0.2s ease, transform 0.2s ease;
+  }
+
+  .checksum-stack-line.active {
+    color: var(--accent);
+    transform: translateX(2px);
+  }
+
+  .checksum-stack-line.result {
+    color: var(--accent3);
+  }
+
   .practice-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -2108,6 +2163,12 @@ Mungon (ndaj IPv4): Checksum, Fragmentation, Options
         <div class="checksum-word result" id="checksum-word-final">Checksum: ?</div>
       </div>
 
+      <div class="checksum-analytics">
+        <h3>Hex -> Bin + Mbledhje Analitike</h3>
+        <div class="checksum-hex-map" id="checksum-hex-map"></div>
+        <div class="checksum-stack" id="checksum-binary-stack"></div>
+      </div>
+
       <div class="checksum-equation" id="checksum-equation">Kliko Play ose Next për të nisur llogaritjen hap pas hapi.</div>
       <div class="packet-log" id="checksum-log">Gati për demonstrim checksum.</div>
       <div class="packet-explain" id="checksum-explain">Checkpoint-at tregojnë çdo transformim: add, carry wrap-around, pastaj one's complement.</div>
@@ -3244,6 +3305,64 @@ function toBin16(value) {
   return (value & 0xffff).toString(2).padStart(16, '0');
 }
 
+function toHex4(value) {
+  return (value & 0xffff).toString(16).toUpperCase().padStart(4, '0');
+}
+
+function formatHexNibbleMap(value) {
+  return toHex4(value)
+    .split('')
+    .map(h => `${h}:${parseInt(h, 16).toString(2).padStart(4, '0')}`)
+    .join('  ');
+}
+
+function toBinN(value, width) {
+  return Math.max(0, value).toString(2).padStart(width, '0');
+}
+
+function stackLine(label, value, classes, bits = 16) {
+  const cls = classes ? ` class="checksum-stack-line ${classes}"` : ' class="checksum-stack-line"';
+  const bin = bits === 16 ? toBin16(value) : toBinN(value, bits);
+  return `<div${cls}>${label.padEnd(15, ' ')} ${bin}</div>`;
+}
+
+function renderChecksumAnalytics() {
+  const mapEl = document.getElementById('checksum-hex-map');
+  const stackEl = document.getElementById('checksum-binary-stack');
+  if (!mapEl || !stackEl) return;
+
+  const [w1, w2, w3] = checksumWords;
+  const { s12, s123, checksum } = checksumCompute(checksumWords);
+
+  mapEl.innerHTML = [
+    `<div class="checksum-hex-row">W1: ${toHex16(w1)} -> ${formatHexNibbleMap(w1)}</div>`,
+    `<div class="checksum-hex-row">W2: ${toHex16(w2)} -> ${formatHexNibbleMap(w2)}</div>`,
+    `<div class="checksum-hex-row">W3: ${toHex16(w3)} -> ${formatHexNibbleMap(w3)}</div>`
+  ].join('');
+
+  const lines = [];
+  if (checksumStepIndex <= 2) {
+    lines.push(stackLine('W1', w1, checksumStepIndex >= 1 ? 'active' : ''));
+    lines.push(stackLine('W2', w2, checksumStepIndex >= 1 ? 'active' : ''));
+    lines.push('<div class="checksum-stack-line">--------------- + ----------------</div>');
+    lines.push(stackLine('Raw(17-bit)', s12.raw, checksumStepIndex >= 1 ? 'active' : '', 17));
+    lines.push(stackLine('Wrap Carry', s12.wrapped, checksumStepIndex >= 2 ? 'result active' : ''));
+  } else {
+    lines.push(stackLine('W1+W2(wrap)', s12.wrapped, checksumStepIndex >= 3 ? 'active' : ''));
+    lines.push(stackLine('W3', w3, checksumStepIndex >= 3 ? 'active' : ''));
+    lines.push('<div class="checksum-stack-line">--------------- + ----------------</div>');
+    lines.push(stackLine('Raw(17-bit)', s123.raw, checksumStepIndex >= 3 ? 'active' : '', 17));
+    lines.push(stackLine('Wrap Carry', s123.wrapped, checksumStepIndex >= 4 ? 'result active' : ''));
+  }
+
+  if (checksumStepIndex >= 5) {
+    lines.push('<div class="checksum-stack-line">One\'s Complement (~)</div>');
+    lines.push(stackLine('Checksum', checksum, 'result active'));
+  }
+
+  stackEl.innerHTML = lines.join('');
+}
+
 function checksumCompute(words) {
   const s12 = checksumAddWithCarry(words[0], words[1]);
   const s123 = checksumAddWithCarry(s12.wrapped, words[2]);
@@ -3259,6 +3378,7 @@ function renderChecksumBoard() {
   document.getElementById('checksum-word-1').textContent = formatWordLine('W1', checksumWords[0]);
   document.getElementById('checksum-word-2').textContent = formatWordLine('W2', checksumWords[1]);
   document.getElementById('checksum-word-3').textContent = formatWordLine('W3', checksumWords[2]);
+  renderChecksumAnalytics();
 }
 
 function parseHexWordInput(raw) {
@@ -3329,6 +3449,7 @@ function renderChecksumStep() {
     log.textContent = 'Checkpoint 0: Nisja e demo-s, 3 fjalë 16-bit gati për llogaritje.';
     explain.textContent = 'Në TCP/UDP checksum, data ndahet në fjalë 16-bit dhe mblidhet me one\'s complement addition.';
     eq.textContent = `${toHex16(w1)} + ${toHex16(w2)} + ${toHex16(w3)} = ?`;
+    renderChecksumAnalytics();
     return;
   }
 
@@ -3338,6 +3459,7 @@ function renderChecksumStep() {
     log.textContent = 'Checkpoint 1: Mbledhja e W1 + W2.';
     explain.textContent = 'Fillimisht bëjmë mbledhjen binare 16-bit të dy fjalëve të para.';
     eq.textContent = `${toHex16(w1)} + ${toHex16(w2)} = ${toHexN(s12.raw, 5)} (raw 17-bit)`;
+    renderChecksumAnalytics();
     return;
   }
 
@@ -3347,6 +3469,7 @@ function renderChecksumStep() {
     log.textContent = 'Checkpoint 2: Carry wrap-around pas W1+W2.';
     explain.textContent = 'Biti i 17-të (carry) shtohet te 16 bitët e poshtëm.';
     eq.textContent = `${toHex16(s12.low)} + carry(${s12.carry}) = ${toHex16(s12.wrapped)} [${toBin16(s12.wrapped)}]`;
+    renderChecksumAnalytics();
     return;
   }
 
@@ -3355,6 +3478,7 @@ function renderChecksumStep() {
     log.textContent = 'Checkpoint 3: Shtohet W3 te shuma paraprake.';
     explain.textContent = 'Tani vazhdojmë me fjalën e tretë dhe përsëri mbajmë logjikën 16-bit.';
     eq.textContent = `${toHex16(s12.wrapped)} + ${toHex16(w3)} = ${toHexN(s123.raw, 5)} (raw 17-bit)`;
+    renderChecksumAnalytics();
     return;
   }
 
@@ -3363,6 +3487,7 @@ function renderChecksumStep() {
     log.textContent = 'Checkpoint 4: Carry wrap-around pas shtimit të W3.';
     explain.textContent = 'Përsëri, nëse ka carry, e rikthejmë në fund të shumës.';
     eq.textContent = `${toHex16(s123.low)} + carry(${s123.carry}) = ${toHex16(s123.wrapped)} [${toBin16(s123.wrapped)}]`;
+    renderChecksumAnalytics();
     return;
   }
 
@@ -3370,6 +3495,7 @@ function renderChecksumStep() {
     log.textContent = 'Checkpoint 5: One\'s complement i shumës finale.';
     explain.textContent = 'Bëjmë invertimin bit-për-bit të shumës 16-bit për të marrë checksum.';
     eq.textContent = `~${toHex16(s123.wrapped)} = ${toHex16(checksum)} [${toBin16(checksum)}]`;
+    renderChecksumAnalytics();
     return;
   }
 
@@ -3378,6 +3504,7 @@ function renderChecksumStep() {
   log.textContent = 'Checkpoint 6: Checksum final gati për vendosje në header.';
   explain.textContent = 'Në receiver bëhet e njëjta mbledhje me checksum-in; rezultati i pritur është all-ones nëse s\'ka gabime.';
   eq.textContent = `Final: ${toHex16(checksum)} = ${toBin16(checksum)}`;
+  renderChecksumAnalytics();
 }
 
 function nextChecksumCheckpoint() {
