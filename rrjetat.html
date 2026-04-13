@@ -1,0 +1,3873 @@
+
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kollokvium — Rrjeta Komunikuese ICT</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --surface: #111827;
+    --surface2: #1a2235;
+    --accent: #00d4ff;
+    --accent2: #7c3aed;
+    --accent3: #10b981;
+    --accent4: #f59e0b;
+    --red: #ef4444;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --border: rgba(255,255,255,0.07);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* HEADER */
+  header {
+    padding: 60px 40px 40px;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(135deg, #0a0e1a 0%, #0f1729 50%, #0a0e1a 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -80px; left: -80px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(0,212,255,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; right: 100px;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(124,58,237,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .badge {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    border: 1px solid rgba(0,212,255,0.3);
+    padding: 4px 12px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 800;
+    line-height: 1.1;
+    background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 12px;
+  }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: 1rem;
+    font-weight: 300;
+  }
+
+  /* NAV TABS */
+  .nav {
+    display: flex;
+    gap: 0;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    padding: 0 20px;
+  }
+  .nav-tab {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 1px;
+    padding: 16px 20px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    color: var(--muted);
+    white-space: nowrap;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    border: none;
+    background: none;
+  }
+  .nav-tab:hover { color: var(--text); }
+  .nav-tab.active { color: var(--accent); border-bottom: 2px solid var(--accent); }
+
+  /* MAIN */
+  .container { max-width: 1100px; margin: 0 auto; padding: 40px 24px; }
+
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* CARDS */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+    margin-bottom: 20px;
+    position: relative;
+    transition: border-color 0.2s;
+  }
+  .card:hover { border-color: rgba(0,212,255,0.2); }
+
+  .card-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+  }
+  .card h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
+  .card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin: 18px 0 8px;
+    color: var(--accent);
+  }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media(max-width:700px){ .grid-2 { grid-template-columns: 1fr; } }
+
+  /* DEFINITION BOX */
+  .def {
+    background: var(--surface2);
+    border-left: 3px solid var(--accent);
+    padding: 14px 18px;
+    border-radius: 0 8px 8px 0;
+    margin: 12px 0;
+    font-size: 0.93rem;
+    position: relative;
+    transition: all 0.2s;
+  }
+  .def strong { color: var(--accent); font-family: 'IBM Plex Mono', monospace; font-size: 0.9em; }
+
+  /* TOOLTIP DEFINITION */
+  .def[data-tip] {
+    cursor: help;
+    border-left-color: var(--accent2);
+  }
+  .def[data-tip]:hover {
+    background: #1e2a45;
+    border-left-color: var(--accent);
+    transform: translateX(3px);
+  }
+  .def[data-tip]::after {
+    content: '💡 hover për detaje';
+    position: absolute;
+    top: 8px; right: 12px;
+    font-size: 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--accent2);
+    opacity: 0.7;
+    letter-spacing: 0.5px;
+    pointer-events: none;
+  }
+  .def[data-tip]:hover::after { opacity: 0; }
+
+  /* TOOLTIP POPUP */
+  .tooltip-box {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    background: #0d1526;
+    border: 1px solid var(--accent);
+    border-radius: 10px;
+    padding: 16px 20px;
+    max-width: 340px;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    color: var(--text);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.6), 0 0 0 1px rgba(0,212,255,0.1);
+    pointer-events: none;
+    animation: fadeInTip 0.15s ease;
+  }
+  .tooltip-box.visible { display: block; }
+  .tooltip-box .tip-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 6px;
+  }
+  @keyframes fadeInTip {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* TAGS */
+  .tag {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 4px;
+    margin: 3px 3px 3px 0;
+  }
+  .tag-blue { background: rgba(0,212,255,0.1); color: var(--accent); border: 1px solid rgba(0,212,255,0.25); }
+  .tag-purple { background: rgba(124,58,237,0.1); color: #a78bfa; border: 1px solid rgba(124,58,237,0.25); }
+  .tag-green { background: rgba(16,185,129,0.1); color: var(--accent3); border: 1px solid rgba(16,185,129,0.25); }
+  .tag-yellow { background: rgba(245,158,11,0.1); color: var(--accent4); border: 1px solid rgba(245,158,11,0.25); }
+  .tag-red { background: rgba(239,68,68,0.1); color: var(--red); border: 1px solid rgba(239,68,68,0.25); }
+
+  /* TABLE */
+  table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+  th {
+    background: var(--surface2);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+
+  /* FORMULA */
+  .formula {
+    background: #0f172a;
+    border: 1px solid rgba(0,212,255,0.2);
+    border-radius: 8px;
+    padding: 14px 18px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.9rem;
+    color: var(--accent);
+    margin: 12px 0;
+    overflow-x: auto;
+  }
+
+  /* LIST */
+  ul.clean { list-style: none; padding: 0; }
+  ul.clean li {
+    padding: 7px 0 7px 20px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    font-size: 0.93rem;
+  }
+  ul.clean li:last-child { border-bottom: none; }
+  ul.clean li::before {
+    content: '›';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  /* ACCORDION */
+  .accordion { margin-bottom: 10px; }
+  .acc-header {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 20px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    transition: all 0.2s;
+  }
+  .acc-header:hover { border-color: rgba(0,212,255,0.3); }
+  .acc-header.open { border-color: var(--accent); color: var(--accent); border-radius: 8px 8px 0 0; }
+  .acc-icon { font-size: 1.2rem; transition: transform 0.2s; }
+  .acc-header.open .acc-icon { transform: rotate(45deg); }
+  .acc-body {
+    background: var(--surface2);
+    border: 1px solid var(--accent);
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    padding: 20px;
+    display: none;
+    font-size: 0.92rem;
+  }
+  .acc-body.open { display: block; }
+
+  /* QUIZ */
+  .quiz-q {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  .quiz-q p { font-weight: 500; margin-bottom: 12px; }
+  .quiz-opt {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 9px 12px;
+    border-radius: 6px;
+    margin: 6px 0;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    transition: all 0.15s;
+    font-size: 0.9rem;
+  }
+  .quiz-opt:hover { border-color: rgba(0,212,255,0.3); background: rgba(0,212,255,0.04); }
+  .quiz-opt.correct { background: rgba(16,185,129,0.1); border-color: var(--accent3); color: var(--accent3); }
+  .quiz-opt.wrong { background: rgba(239,68,68,0.1); border-color: var(--red); color: var(--red); }
+  .quiz-check {
+    margin-top: 12px;
+    display: none;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    padding: 10px 14px;
+    border-radius: 6px;
+  }
+  .quiz-check.correct-msg { background: rgba(16,185,129,0.1); color: var(--accent3); border: 1px solid var(--accent3); }
+  .quiz-check.wrong-msg { background: rgba(239,68,68,0.1); color: var(--red); border: 1px solid var(--red); }
+
+  .quiz-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+
+  .quiz-feedback {
+    margin-top: 14px;
+    display: none;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    background: var(--surface2);
+    font-size: 0.9rem;
+  }
+
+  .ghost-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 10px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    transition: all 0.2s;
+  }
+  .ghost-btn:hover {
+    border-color: rgba(0,212,255,0.35);
+    color: var(--accent);
+  }
+
+  .hover-note {
+    margin-top: 12px;
+    background: rgba(0,212,255,0.06);
+    border: 1px dashed rgba(0,212,255,0.3);
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 0.87rem;
+    color: var(--muted);
+  }
+
+  /* FLASHCARDS */
+  .flash-wrap {
+    display: grid;
+    gap: 16px;
+  }
+
+  .flash-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .flash-card {
+    background: linear-gradient(145deg, #0f1a2f 0%, #121d33 100%);
+    border: 1px solid rgba(0,212,255,0.25);
+    border-radius: 14px;
+    min-height: 220px;
+    padding: 26px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+  }
+
+  .flash-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent);
+    box-shadow: 0 10px 26px rgba(0, 140, 170, 0.2);
+  }
+
+  .flash-side-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .flash-question {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.35;
+  }
+
+  .flash-answer {
+    margin-top: 12px;
+    border-top: 1px solid var(--border);
+    padding-top: 12px;
+    color: #c7d2fe;
+    display: none;
+  }
+
+  .flash-answer.visible {
+    display: block;
+    animation: fadeInTip 0.2s ease;
+  }
+
+  .exam-mode {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .timer-pill {
+    color: var(--accent4);
+    border: 1px solid rgba(245,158,11,0.3);
+    border-radius: 20px;
+    padding: 4px 10px;
+    background: rgba(245,158,11,0.08);
+  }
+
+  .subnet-steps {
+    display: grid;
+    gap: 10px;
+  }
+
+  .step-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+    min-height: 88px;
+  }
+
+  .step-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .mono {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.9rem;
+  }
+
+  .subnet-input {
+    width: 100%;
+    background: #0c1424;
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-family: 'IBM Plex Mono', monospace;
+    margin-bottom: 10px;
+  }
+
+  .subnet-result {
+    margin-top: 8px;
+    display: none;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    background: var(--surface2);
+    font-size: 0.9rem;
+  }
+
+  .bin-line {
+    background: #0c1424;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--accent);
+    margin-top: 8px;
+    word-break: break-all;
+  }
+
+  .lane {
+    position: relative;
+    background: #0c1424;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px 42px;
+    margin-top: 10px;
+    min-height: 96px;
+  }
+
+  .lane-track {
+    position: absolute;
+    left: 14%;
+    right: 14%;
+    top: 58px;
+    height: 2px;
+    background: linear-gradient(90deg, rgba(0,212,255,0.2), rgba(124,58,237,0.3));
+  }
+
+  .lane-end {
+    position: absolute;
+    top: 45px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .lane-end.left { left: 10px; }
+  .lane-end.right { right: 10px; }
+
+  .packet {
+    position: absolute;
+    top: 48px;
+    left: 14%;
+    transform: translateX(0);
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    background: rgba(0,212,255,0.15);
+    border: 1px solid rgba(0,212,255,0.4);
+    color: var(--accent);
+    transition: transform 0.9s ease, opacity 0.3s ease;
+  }
+  .packet.tcp {
+    background: rgba(16,185,129,0.15);
+    border-color: rgba(16,185,129,0.4);
+    color: var(--accent3);
+  }
+
+  .packet-log {
+    margin-top: 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface2);
+    padding: 10px 12px;
+    font-size: 0.86rem;
+    min-height: 56px;
+  }
+
+  .packet-explain {
+    margin-top: 8px;
+    border-left: 3px solid rgba(0,212,255,0.45);
+    background: rgba(0,212,255,0.08);
+    border-radius: 0 8px 8px 0;
+    padding: 9px 12px;
+    font-size: 0.88rem;
+    color: #cbd5e1;
+  }
+
+  .checksum-board {
+    margin-top: 10px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: #0c1424;
+    padding: 12px;
+  }
+
+  .checksum-word {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+    color: #9fb3c8;
+    border: 1px solid rgba(0,212,255,0.12);
+    border-radius: 8px;
+    padding: 7px 10px;
+    margin-top: 8px;
+    transition: all 0.25s ease;
+  }
+
+  .checksum-word:first-child { margin-top: 0; }
+
+  .checksum-word.active {
+    color: var(--accent);
+    border-color: rgba(0,212,255,0.5);
+    background: rgba(0,212,255,0.09);
+    box-shadow: 0 0 0 1px rgba(0,212,255,0.2) inset;
+  }
+
+  .checksum-word.result {
+    color: var(--accent3);
+    border-color: rgba(16,185,129,0.45);
+    background: rgba(16,185,129,0.1);
+  }
+
+  .checksum-equation {
+    margin-top: 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    color: #d0e3f3;
+    font-size: 0.86rem;
+    padding: 9px 10px;
+    border-radius: 8px;
+    border: 1px dashed rgba(148, 163, 184, 0.35);
+    background: rgba(15, 23, 42, 0.65);
+    min-height: 44px;
+  }
+
+  .checksum-details {
+    margin-top: 12px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface2);
+    padding: 12px;
+  }
+
+  .checksum-details h3 {
+    margin-bottom: 8px;
+    font-size: 1rem;
+    font-family: 'Syne', sans-serif;
+  }
+
+  .checksum-details ol {
+    margin: 0;
+    padding-left: 20px;
+  }
+
+  .checksum-details li {
+    margin: 6px 0;
+    color: #d7e5f3;
+  }
+
+  .checksum-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(130px, 1fr));
+    gap: 10px;
+    margin-top: 10px;
+  }
+  @media(max-width:700px){ .checksum-grid { grid-template-columns: 1fr; } }
+
+  .checksum-score {
+    margin-top: 10px;
+    border: 1px solid rgba(16,185,129,0.28);
+    background: rgba(16,185,129,0.08);
+    color: #d1fae5;
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.84rem;
+  }
+
+  .practice-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  @media(max-width:700px){ .practice-grid { grid-template-columns: 1fr; } }
+
+  .small-muted {
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  .dash-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(130px, 1fr));
+    gap: 10px;
+    margin-top: 12px;
+  }
+  @media(max-width:800px){ .dash-grid { grid-template-columns: repeat(2, minmax(120px, 1fr)); } }
+
+  .dash-item {
+    background: #0c1424;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px;
+  }
+
+  .dash-k {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .dash-v {
+    margin-top: 4px;
+    font-family: 'Syne', sans-serif;
+    font-size: 1.15rem;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  .step-chip {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 14px;
+    border: 1px solid rgba(0,212,255,0.25);
+    color: var(--accent);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    margin-bottom: 8px;
+  }
+
+  .modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(4, 9, 18, 0.75);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999;
+    padding: 20px;
+  }
+
+  .modal.open {
+    display: flex;
+  }
+
+  .modal-card {
+    width: min(760px, 100%);
+    background: #0c1424;
+    border: 1px solid rgba(0,212,255,0.25);
+    border-radius: 14px;
+    padding: 18px;
+    box-shadow: 0 14px 40px rgba(0,0,0,0.45);
+  }
+
+  .modal-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.35rem;
+    margin-bottom: 10px;
+  }
+
+  .list-lite {
+    margin-top: 10px;
+    padding-left: 18px;
+    color: var(--text);
+  }
+
+  .list-lite li {
+    margin: 6px 0;
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.7rem;
+    font-weight: 800;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .section-title span.icon {
+    font-size: 1.4rem;
+    background: var(--surface2);
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* PROGRESS BAR */
+  .progress-wrap { margin-bottom: 30px; }
+  .progress-label { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted); margin-bottom: 6px; }
+  .progress-bar { background: var(--surface2); height: 6px; border-radius: 3px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--accent), var(--accent2)); transition: width 0.5s ease; }
+
+  /* HIGHLIGHT */
+  .highlight { color: var(--accent); font-weight: 500; }
+  .green { color: var(--accent3); }
+  .yellow { color: var(--accent4); }
+  .red { color: var(--red); }
+
+  /* PORT TABLE special */
+  .port-row td:first-child { font-family: 'IBM Plex Mono', monospace; color: var(--accent4); font-weight: 600; }
+  .port-row td:nth-child(2) { color: var(--accent); font-weight: 500; }
+
+  /* TCP vs UDP comparison */
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media(max-width:600px){ .compare-grid { grid-template-columns: 1fr; } }
+
+  .compare-col {
+    background: var(--surface2);
+    border-radius: 10px;
+    padding: 20px;
+  }
+  .compare-col h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid;
+  }
+  .compare-col.tcp h3 { color: var(--accent); border-color: var(--accent); }
+  .compare-col.udp h3 { color: var(--accent4); border-color: var(--accent4); }
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    padding: 5px 12px;
+    border-radius: 20px;
+    margin: 4px 0;
+  }
+  .pill-green { background: rgba(16,185,129,0.1); color: var(--accent3); }
+  .pill-red { background: rgba(239,68,68,0.1); color: var(--red); }
+  .pill::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+  /* STICKY nav indicator */
+  .active-dot { width:6px; height:6px; background: var(--accent); border-radius: 50%; display:inline-block; margin-right:6px; }
+
+  footer {
+    text-align: center;
+    padding: 30px;
+    color: var(--muted);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    border-top: 1px solid var(--border);
+    margin-top: 40px;
+  }
+  footer a { color: var(--accent); text-decoration: none; margin-left: 6px; }
+  footer a:hover { text-decoration: underline; }
+  .footer-gh {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .footer-gh svg {
+    width: 14px;
+    height: 14px;
+    fill: currentColor;
+    opacity: 0.95;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge">📡 ICT BSc — Sem IV — 2026</div>
+  <h1>Rrjeta Komunikuese</h1>
+  <p class="subtitle">Material i plotë për kollokvium · 4 Leksione · <span style="color:var(--accent)">Made by Gent</span></p>
+</header>
+
+<nav class="nav">
+  <button class="nav-tab active" onclick="showSection('lect1', this)">🌐 Leksion 1</button>
+  <button class="nav-tab" onclick="showSection('lect2', this)">📦 Leksion 2 — App Layer</button>
+  <button class="nav-tab" onclick="showSection('lect3', this)">🔗 Leksion 3 — Transport</button>
+  <button class="nav-tab" onclick="showSection('lect4', this)">🗺️ Leksion 4 — Network</button>
+  <button class="nav-tab" onclick="showSection('quiz', this)">✅ Kuiz Praktik</button>
+  <button class="nav-tab" onclick="showSection('koll-template', this)">🧾 Template Kollokfiumi</button>
+  <button class="nav-tab" onclick="showSection('flashcards', this)">🧠 Flashcards</button>
+  <button class="nav-tab" onclick="showSection('packetlab', this)">📨 Packet Lab</button>
+  <button class="nav-tab" onclick="showSection('subnetlab', this)">🧮 Subnet Lab</button>
+  <button class="nav-tab" onclick="showSection('cheatsheet', this)">⚡ Cheat Sheet</button>
+</nav>
+
+<div class="container">
+
+<!-- ========== LEKSION 1 ========== -->
+<div id="lect1" class="section active">
+  <div class="section-title"><span class="icon">🌐</span> Leksion 1: Hyrje në Rrjeta Komunikuese</div>
+
+  <div class="card">
+    <div class="card-label" style="color:var(--accent)">Definicione Kyçe</div>
+    <h2>Çfarë është një Rrjet Komunikues?</h2>
+    <div class="def"><strong>Rrjet Komunikues:</strong> Pajisjet (hardware & software) dhe infrastruktura që ofrojnë shërbim bazë komunikimi. Zakonisht paraqitet si "cloud" për shkak se është transparent ndaj përdoruesit.</div>
+    <div class="def"><strong>Pajisjet kryesore:</strong> Routers, servers, switches, multiplexers, hubs, modems</div>
+    <div class="def"><strong>Fasilitetet:</strong> Tela bakri, kabllo koaksiale, fibra optike, ndenjëse, shtylla telefonie</div>
+  </div>
+
+  <div class="card">
+    <div class="card-label" style="color:var(--accent2)">Historia e Rrjetave</div>
+    <h2>Evoluimi i Sistemit Telefonik</h2>
+    <ul class="clean">
+      <li><strong>1875</strong> — Alexander Graham Bell punon mbi telegrafi harmonik, zbulon transmetimin e zërit</li>
+      <li><strong>1876</strong> — Patenta e telefonit</li>
+      <li><strong>1877</strong> — Themelimi i Bell Telephone Company</li>
+      <li><strong>1877</strong> — Shpikja e switch-it me patchcord (Circuit Switching)</li>
+      <li><strong>1888</strong> — Strowger shpik switch-in automatik</li>
+      <li><strong>1961</strong> — T-1 multiplexing: 24 zëra = 1.544 Mbps</li>
+      <li><strong>1980s</strong> — Digital Switching</li>
+      <li><strong>1990s</strong> — Digital Cellular, Fiber Optike (OC-192 = 10 Gbps)</li>
+    </ul>
+    <div class="formula">Problemi N²: Për N përdorues → nevojiten N(N-1)/2 lidhje direkte<br>Zgjidhja: Circuit Switching → vetëm N lidhje me qendrën</div>
+  </div>
+
+  <div class="card">
+    <div class="card-label" style="color:var(--accent3)">Historia e Internetit</div>
+    <h2>Evoluimi i Rrjetave Kompjuterike</h2>
+    <ul class="clean">
+      <li><strong>1950s</strong> — Teknologjia telegrafe adaptuar për kompjuterë</li>
+      <li><strong>1960s</strong> — Terminale "bosh" aksesin server-in qendror (SABRE)</li>
+      <li><strong>1970s</strong> — ARPANET (packet switching), TCP/IP, Ethernet LAN</li>
+      <li><strong>1973</strong> — Martin Cooper (Motorola) shpik telefonin mobil</li>
+      <li><strong>1974</strong> — Protokolli TCP (Cerf & Kahn)</li>
+      <li><strong>1985-1995</strong> — NSFNET si backbone i Internetit</li>
+      <li><strong>1979-1983</strong> — 1G: Rrjeta analoge mobile (Japoni, USA)</li>
+      <li><strong>2G</strong> — Dixhital: GSM (Europë), CDMA (USA), SMS</li>
+      <li><strong>3G</strong> — Circuit + Packet switching</li>
+      <li><strong>LTE/4G</strong> — Vetëm IP packet switching, deri 1 Gbps</li>
+      <li><strong>5G</strong> — 10x bitrate, 10x latency↓, 100x kapacitet ndaj 4G</li>
+    </ul>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h2>5G — Tri Rastet e Përdorimit</h2>
+      <div class="def"><strong>eMBB</strong> (Enhanced Mobile Broadband) — AR, VR, 4K video, 360°</div>
+      <div class="def"><strong>URLLC</strong> (Ultra Reliable Low-Latency) — Automatizim fabrike, vozitje autonome. Latency: ~1ms</div>
+      <div class="def"><strong>mMTC</strong> (Massive Machine Type Comm.) — Sensing, metering, monitoring</div>
+      <p style="margin-top:12px; font-size:0.9rem; color:var(--muted)">Brezat: FR1 (450 MHz–6 GHz) dhe FR2 (24 GHz–52 GHz)</p>
+    </div>
+    <div class="card">
+      <h2>Llojet e Rrjetave sipas Mbulimit</h2>
+      <div class="def"><strong>PAN</strong> (Personal Area Network) — Bluetooth, mbulim personal</div>
+      <div class="def"><strong>LAN</strong> (Local Area Network) — Shtëpi, zyrë, ndërtesë</div>
+      <div class="def"><strong>MAN</strong> (Metropolitan Area Network) — Qytet</div>
+      <div class="def"><strong>WAN</strong> (Wide Area Network) — Vend, ISP network</div>
+      <div class="def"><strong>VPN</strong> (Virtual Private Network) — WAN e ndërtuar mbi lidhje virtuale në Internet</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Llojet e Rrjetave sipas Funksionit</h2>
+    <table>
+      <tr><th>Lloji</th><th>Pershkrimi</th><th>Shembull</th></tr>
+      <tr><td>Broadband Access</td><td>Lidhja e shtëpive/përdoruesve me Internetin</td><td>DSL, Fiber, Cable</td></tr>
+      <tr><td>Mobile/Wireless</td><td>Rrjeta celulare, Wi-Fi, NFC, GPS, Sensor</td><td>4G, 802.11</td></tr>
+      <tr><td>CDN (Content Delivery)</td><td>Serverë gjeografikisht të shpërndarë afër përdoruesve</td><td>Akamai, Netflix CDN</td></tr>
+      <tr><td>Transit/Backbone</td><td>Lidh ISP-të kur nuk janë direkt të lidhur</td><td>ISP-të nacionale</td></tr>
+      <tr><td>Enterprise</td><td>Rrjeta organizative, shpërndarje burimesh</td><td>VPN shumë-siti</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>Topologjitë e Rrjetave</h2>
+    <div class="grid-2">
+      <div>
+        <div class="def"><strong>Bus</strong> — Të gjithë ngjitet me 1 kabllo të përbashkët</div>
+        <div class="def"><strong>Ring</strong> — Secili nyje lidhet me dy fqinjë, formë unaze</div>
+        <div class="def"><strong>Star</strong> — Të gjithë lidhen me një qendër (switch/hub)</div>
+      </div>
+      <div>
+        <div class="def"><strong>Mesh</strong> — Çdo nyje mund të lidhet me çdo nyje tjetër</div>
+        <div class="def"><strong>Tree</strong> — Hierarkike, rrënjë-degë-gjethe</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Arkitektura e Shtresave (Layered Architecture)</h2>
+    <div class="def"><strong>Protokoll-layering</strong> — Metoda kryesore për ndarjen e funksionalitetit të rrjetit. Çdo shtresë komunikon vetëm me atë poshtë saj.</div>
+    <table>
+      <tr><th>Shtresa TCP/IP</th><th>Protokolle</th><th>Funksioni</th></tr>
+      <tr><td>Application</td><td>HTTP, SMTP, DNS, FTP</td><td>Aplikacionet e përdoruesit</td></tr>
+      <tr><td>Transport</td><td>TCP, UDP</td><td>Komunikim proces-me-proces</td></tr>
+      <tr><td>Network</td><td>IP, ICMP</td><td>Komunikim host-me-host</td></tr>
+      <tr><td>Link</td><td>Ethernet, 802.11</td><td>Transferim në lidhje lokale</td></tr>
+      <tr><td>Physical</td><td>Bits</td><td>Sinjalet fizike</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ========== LEKSION 2 — APP LAYER ========== -->
+<div id="lect2" class="section">
+  <div class="section-title"><span class="icon">📦</span> Leksion 2: Application Layer</div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-label" style="color:var(--accent)">Arkitektura</div>
+      <h2>Client-Server</h2>
+      <ul class="clean">
+        <li>Server: gjithmonë aktiv, IP e përhershme</li>
+        <li>Klientët NUK komunikojnë direkt me njëri-tjetrin</li>
+        <li>Shembuj: HTTP, IMAP, FTP</li>
+        <li>Zakonisht në data centers</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-label" style="color:var(--accent2)">Arkitektura</div>
+      <h2>Peer-to-Peer (P2P)</h2>
+      <ul class="clean">
+        <li>Asnjë server gjithmonë aktiv</li>
+        <li>Peer-ët kërkojnë dhe ofrojnë shërbime njëri-tjetrit</li>
+        <li>Self-scalable — peer-ët e rinj sjellin kapacitet të ri</li>
+        <li>IP dinamike, menaxhim kompleks</li>
+        <li>Shembull: BitTorrent</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Sockets dhe Adresimi</h2>
+    <div class="def"><strong>Socket</strong> — Ndërfaqja midis shtresës aplikacioni dhe shtresës transport brenda një hosti. Quhet edhe API (Application Programming Interface). Si "dera" — mesazhi del nëpërmjet tij.</div>
+    <div class="def"><strong>Identifikuesi i procesit:</strong> Adresa IP (32-bit) + Port Number. Shembull: HTTP port 80, Mail port 25</div>
+    <div class="formula">Identifikuesi: IP_Address : Port_Number<br>Shembull: 128.119.245.12:80</div>
+  </div>
+
+  <div class="card">
+    <h2>Kërkesat e Shërbimit Transport për Aplikacione</h2>
+    <table>
+      <tr><th>Aplikacioni</th><th>Humbja e të dhënave</th><th>Throughput</th><th>Protokolli</th></tr>
+      <tr><td>File transfer, Email, Web</td><td class="red">Asnjë humbje</td><td>Elastic</td><td class="highlight">TCP</td></tr>
+      <tr><td>Audio/Video real-time</td><td class="green">Tolerant humbja</td><td>5Kbps–5Mbps</td><td class="yellow">TCP ose UDP</td></tr>
+      <tr><td>Video streaming</td><td class="green">Tolerant humbja</td><td>E njëjta</td><td class="highlight">TCP</td></tr>
+      <tr><td>Games interaktive</td><td class="green">Tolerant pak</td><td>Kbps+</td><td class="yellow">UDP ose TCP</td></tr>
+      <tr><td>Text messaging</td><td class="red">Asnjë humbje</td><td>Elastic</td><td class="highlight">TCP</td></tr>
+    </table>
+  </div>
+
+  <!-- HTTP -->
+  <div class="card">
+    <div class="card-label" style="color:var(--accent)">Protokolli HTTP</div>
+    <h2>HyperText Transfer Protocol</h2>
+    <div class="def"><strong>HTTP</strong> — Protokolli i shtresës aplikacioni për Web. Përdor TCP (port 80). HTTP është <em>stateless</em> — serveri nuk mban gjendjen e klientit.</div>
+    <div class="grid-2" style="margin-top:14px">
+      <div>
+        <h3>Non-Persistent HTTP</h3>
+        <ul class="clean">
+          <li>Çdo objekt kërkon lidhje TCP të re</li>
+          <li>Koha = 2RTT + koha e transmetimit</li>
+          <li>Overhead i OS për çdo lidhje</li>
+        </ul>
+        <div class="formula">Response time = 2RTT + file_transmission_time</div>
+      </div>
+      <div>
+        <h3>Persistent HTTP (HTTP 1.1)</h3>
+        <ul class="clean">
+          <li>Lidhja TCP mbetet hapur pas përgjigjes</li>
+          <li>Shumë objekte mbi 1 lidhje TCP</li>
+          <li>Minimum 1 RTT për të gjithë objektet</li>
+          <li>Gjysma e kohës krahasuar me non-persistent</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h2>HTTP Request Methods</h2>
+      <div class="def"><strong>GET</strong> — Kërkon objekt nga serveri</div>
+      <div class="def"><strong>POST</strong> — Dërgon të dhëna nga forma në body</div>
+      <div class="def"><strong>HEAD</strong> — Kërkon vetëm headers (pa body)</div>
+      <div class="def"><strong>PUT</strong> — Ngarkon file/objekt të ri në server</div>
+    </div>
+    <div class="card">
+      <h2>HTTP Response Status Codes</h2>
+      <div class="def"><strong>200 OK</strong> — Sukses, objekti vijon</div>
+      <div class="def"><strong>301 Moved Permanently</strong> — Objekti lëviz, lokacioni i ri jepet</div>
+      <div class="def"><strong>304 Not Modified</strong> — Conditional GET, cache valid</div>
+      <div class="def"><strong>400 Bad Request</strong> — Mesazh i pakuptueshëm</div>
+      <div class="def"><strong>404 Not Found</strong> — Dokumenti nuk u gjet</div>
+      <div class="def"><strong>505 HTTP Version Not Supported</strong></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Cookies — Ruajtja e Gjendjes</h2>
+    <div class="def">HTTP është stateless, por <strong>Cookies</strong> lejojnë ruajtjen e gjendjes. Katër komponentët:</div>
+    <ul class="clean">
+      <li>Cookie header në HTTP response message (serveri → klient)</li>
+      <li>Cookie header në HTTP request message (klient → server)</li>
+      <li>File cookie i ruajtur tek hosti i klientit (menaxhohet nga browser)</li>
+      <li>Database backend tek website-i</li>
+    </ul>
+    <div class="def" style="border-left-color:var(--accent4)"><strong>Third-party cookies (tracking)</strong> — Lejojnë gjurmimin e sjelljes mbi shumë faqe. Disabled by default në Firefox, Safari. <strong>GDPR</strong> (2018) rregullon këtë.</div>
+  </div>
+
+  <div class="card">
+    <h2>Web Caches (Proxy Servers)</h2>
+    <div class="def"><strong>Web Cache</strong> — Satisfaton kërkesat e klientëve pa e përfshirë serverin origjinal. Vepron si si klient dhe si server njëkohësisht.</div>
+    <ul class="clean">
+      <li>Redukton kohën e përgjigjes (cache është afër klientit)</li>
+      <li>Redukton trafikun në access link të institucionit</li>
+    </ul>
+    <div class="formula">Shembull: Hit rate 0.4 → access link utilization ↓ nga 0.97 në 0.58<br>Average delay ↓ nga "minutes" në ~1.2 sec</div>
+    <div class="def"><strong>Conditional GET</strong> — If-modified-since header. Nëse objekti nuk ka ndryshuar → 304 Not Modified (asnjë transmetim objekti!)</div>
+  </div>
+
+  <div class="card">
+    <h2>HTTP/2 dhe HTTP/3</h2>
+    <div class="def"><strong>HTTP/1.1</strong> — HOL (Head-of-Line) blocking: objektet e vogla presin prapa objekteve të mëdha.</div>
+    <div class="def"><strong>HTTP/2</strong> (RFC 7540, 2015) — Objektet ndahen në <em>frames</em>, frames transmetohen të ndërmishëm. Prioritet i bazuar në preferencat e klientit. Push objekte pa kërkesë.</div>
+    <div class="def"><strong>HTTP/3</strong> — Shton siguri dhe kontroll errori/congestion per-objekt mbi <strong>UDP</strong>. Zgjidh problemin e bllokimit nga humbja e paketave.</div>
+  </div>
+
+  <!-- SMTP -->
+  <div class="card">
+    <div class="card-label" style="color:var(--accent2)">Protokolli SMTP</div>
+    <h2>Simple Mail Transfer Protocol</h2>
+    <div class="def"><strong>SMTP</strong> (RFC 5321) — Protokolli për email. Përdor TCP, port 25. Tre fazat: Handshaking → Transfer → Closure.</div>
+    <table>
+      <tr><th>Karakteristikë</th><th>HTTP</th><th>SMTP</th></tr>
+      <tr><td>Drejtimi</td><td>Pull (klienti tërheq)</td><td>Push (dërgues shtyn)</td></tr>
+      <tr><td>Lidhja</td><td>Non/Persistent</td><td>Persistent</td></tr>
+      <tr><td>Objekte</td><td>Çdo objekt i veçantë</td><td>Shumë objekte në mesazh</td></tr>
+      <tr><td>Format</td><td>Binary OK</td><td>ASCII 7-bit</td></tr>
+      <tr><td>Porti</td><td>80</td><td>25</td></tr>
+    </table>
+    <div class="def" style="margin-top:14px"><strong>IMAP</strong> — Protokolli i tërheqjes së email (RFC 3501). Mesazhet ruhen në server, ofron folder, fshirje. <strong>HTTP</strong> gjithashtu (Gmail, Yahoo)</div>
+  </div>
+
+  <!-- DNS -->
+  <div class="card">
+    <div class="card-label" style="color:var(--accent3)">Protokolli DNS</div>
+    <h2>Domain Name System</h2>
+    <div class="def"><strong>DNS</strong> — Bazë të dhënash e shpërndarë implementuar si hierarki e serverëve të emrave. Protokoll i shtresës aplikacioni. Port 53 (UDP dhe TCP).</div>
+    <h3>Shërbimet DNS</h3>
+    <ul class="clean">
+      <li>Hostname-to-IP-address translation</li>
+      <li>Host aliasing (emra alternativë)</li>
+      <li>Mail server aliasing</li>
+      <li>Load distribution (shumë IP → 1 emër)</li>
+    </ul>
+    <h3>Hierarkia e Serverëve DNS</h3>
+    <div class="def"><strong>Root Name Servers</strong> — 13 serverë logjikë botërorë (replicated ~200 në USA). Menaxhohen nga ICANN. DNSSEC siguron autentifikimin.</div>
+    <div class="def"><strong>TLD Servers</strong> (Top-Level Domain) — Responsible për .com, .org, .edu, .net, etj. dhe domaine kombëtare (.al, .uk, .de)</div>
+    <div class="def"><strong>Authoritative DNS</strong> — Serverët DNS të organizatës, ofrojnë hostname → IP për hostet e organizatës</div>
+    <div class="def"><strong>Local DNS</strong> — Çdo ISP ka nga 1. Hosti dërgon query-n te Local DNS i tij. Port 53 UDP.</div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h2>Iterated Query DNS</h2>
+      <ul class="clean">
+        <li>Local DNS → Root → (emrin e TLD)</li>
+        <li>Local DNS → TLD → (emrin e Authoritative)</li>
+        <li>Local DNS → Authoritative → IP</li>
+        <li>Local DNS → klienti</li>
+      </ul>
+      <p style="font-size:0.9rem; color:var(--accent3); margin-top:10px">✓ Best practice — ulet ngarkesa tek Root/TLD</p>
+    </div>
+    <div class="card">
+      <h2>Recursive Query DNS</h2>
+      <ul class="clean">
+        <li>Hosti → Local DNS</li>
+        <li>Local DNS → Root</li>
+        <li>Root → TLD (recursive)</li>
+        <li>TLD → Authoritative (recursive)</li>
+      </ul>
+      <p style="font-size:0.9rem; color:var(--red); margin-top:10px">✗ Ngarkesë e rëndë tek serverët e sipërm</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>DNS Resource Records (RR)</h2>
+    <div class="def">Format: <strong>(name, value, type, ttl)</strong></div>
+    <table>
+      <tr><th>Tipi</th><th>Emri</th><th>Vlera</th><th>Qëllimi</th></tr>
+      <tr><td class="highlight">A</td><td>hostname</td><td>IP address</td><td>Lidhja emër→IP</td></tr>
+      <tr><td class="highlight">NS</td><td>domain</td><td>hostname i auth. serverit</td><td>Tregon ku DNS auth.</td></tr>
+      <tr><td class="highlight">CNAME</td><td>alias</td><td>emri kanonik (real)</td><td>Emra alternativë</td></tr>
+      <tr><td class="highlight">MX</td><td>domain</td><td>emri i mail serverit</td><td>Email routing</td></tr>
+    </table>
+    <div class="def" style="margin-top:14px"><strong>TTL</strong> — Koha sa qëndron rekordi në cache. Kur skadon, bëhet fresh query. Cache mund të jetë e vjetëruar!</div>
+  </div>
+
+  <!-- DASH & CDN -->
+  <div class="card">
+    <div class="card-label" style="color:var(--accent4)">Video Streaming</div>
+    <h2>DASH & CDN</h2>
+    <div class="def"><strong>DASH</strong> (Dynamic, Adaptive Streaming over HTTP) — Serveri ndan video në chunks, secili i enkoduar me rate të ndryshme. Klienti zgjedh çipësin sipas bandwidth-it.</div>
+    <div class="def"><strong>CDN</strong> (Content Distribution Network) — Serverë të shumtë gjeografikisht të shpërndarë. Qëllimi: content afër përdoruesit.</div>
+    <div class="grid-2">
+      <div>
+        <h3>CBR vs VBR</h3>
+        <div class="def"><strong>CBR</strong> — Constant Bit Rate: rate fikse encoding</div>
+        <div class="def"><strong>VBR</strong> — Variable Bit Rate: ndryshon sipas kompleksitetit</div>
+      </div>
+      <div>
+        <h3>CDN Strategjitë</h3>
+        <div class="def"><strong>Enter deep</strong> — Serverë CDN deep në access networks. (Akamai: 240K serverë, 120+ vende)</div>
+        <div class="def"><strong>Bring home</strong> — Grupe të mëdha afër access nets. (Limelight)</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== LEKSION 3 — TRANSPORT ========== -->
+<div id="lect3" class="section">
+  <div class="section-title"><span class="icon">🔗</span> Leksion 3: Transport Layer</div>
+
+  <div class="card">
+    <div class="def"><strong>Transport Layer</strong> — Ofron komunikim logjik midis proceseve aplikacioni që punojnë në hose të ndryshëm. Dërgues: ndan mesazhet në segmente → shtresës rrjetit. Marrësi: rimonon segmentet → shtresës aplikacioni.</div>
+    <div class="def"><strong>Dallimi Transport vs Network Layer:</strong> Network layer — komunikim host-me-host. Transport layer — komunikim proces-me-proces (bazuar në shërbimin e shtresës rrjetit).</div>
+  </div>
+
+  <div class="compare-grid" style="margin-bottom:20px">
+    <div class="compare-col tcp">
+      <h3>TCP — Transmission Control Protocol</h3>
+      <div class="pill pill-green">Reliable, in-order delivery</div><br>
+      <div class="pill pill-green">Flow control</div><br>
+      <div class="pill pill-green">Congestion control</div><br>
+      <div class="pill pill-green">Connection setup</div><br>
+      <div class="pill pill-green">Full duplex</div><br>
+      <div class="pill pill-green">Cumulative ACKs</div><br>
+      <div class="pill pill-red">Nuk garanton: timing, minimum throughput, security</div>
+    </div>
+    <div class="compare-col udp">
+      <h3>UDP — User Datagram Protocol</h3>
+      <div class="pill pill-red">Unreliable, unordered</div><br>
+      <div class="pill pill-red">Pa flow control</div><br>
+      <div class="pill pill-red">Pa congestion control</div><br>
+      <div class="pill pill-red">Pa connection setup</div><br>
+      <div class="pill pill-green">Shpejtësi</div><br>
+      <div class="pill pill-green">Checksum (detektim gabimesh)</div><br>
+      <p style="margin-top:10px; font-size:0.85rem; color:var(--muted)">Përdoret: DNS, SNMP, HTTP/3, streaming, gaming</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Multiplexing / Demultiplexing</h2>
+    <div class="def"><strong>Multiplexing (dërgues)</strong> — Mbledh të dhënat nga sockets të shumta, mbështjell me header → segmente.</div>
+    <div class="def"><strong>Demultiplexing (marrës)</strong> — Dërgon segmentin e marrë tek socketi i duhur duke përdorur IP/port.</div>
+    <div class="grid-2" style="margin-top:14px">
+      <div>
+        <h3>UDP Demultiplexing</h3>
+        <div class="def">Bazuar vetëm në <strong>destination port number</strong>. Datagrams me dest port të njëjtë por source të ndryshme → i njëjti socket.</div>
+      </div>
+      <div>
+        <h3>TCP Demultiplexing</h3>
+        <div class="def">Bazuar në <strong>4-tuple</strong>: Source IP + Source Port + Dest IP + Dest Port. Secili socket ka 4-tuple unike.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>UDP Segment Structure</h2>
+    <div class="formula">
+| source port # | dest port # |  (32 bits)
+|    length     |  checksum   |
+|         application data               |
+    </div>
+    <div class="def"><strong>Length</strong> — Gjatësia totale e segmentit UDP (header + data) në bytes.</div>
+    <div class="def"><strong>Checksum</strong> — Detekton gabime (bit të flipuar). One's complement sum i 16-bit integers. Nëse jo i barabartë → gabim i zbuluar.</div>
+  </div>
+
+  <!-- RDT -->
+  <div class="card">
+    <div class="card-label" style="color:var(--accent2)">Reliable Data Transfer</div>
+    <h2>Principet e RDT</h2>
+    <div class="accordion">
+      <div class="acc-header" onclick="toggleAcc(this)"><span>rdt1.0 — Kanal i besueshëm</span><span class="acc-icon">+</span></div>
+      <div class="acc-body"><div class="def">Kanali nuk ka gabime, nuk humbet pako. Dërgusi dërgon, marrësi pranon. Asnjë mekanizëm i posaçëm i nevojshëm.</div></div>
+    </div>
+    <div class="accordion">
+      <div class="acc-header" onclick="toggleAcc(this)"><span>rdt2.0 — Kanal me bit errors</span><span class="acc-icon">+</span></div>
+      <div class="acc-body"><div class="def">Checksum detekton gabime. Mekanizmat: <strong>ACK</strong> (OK) dhe <strong>NAK</strong> (gabim → retransmit). <strong>Defekti fatal:</strong> Nëse ACK/NAK dëmtohet, dërgusi nuk di çfarë ndodhi!</div></div>
+    </div>
+    <div class="accordion">
+      <div class="acc-header" onclick="toggleAcc(this)"><span>rdt2.1 — Sequence Numbers</span><span class="acc-icon">+</span></div>
+      <div class="acc-body"><div class="def">Shton <strong>sequence numbers</strong> për të trajtuar ACK/NAK të dëmtuar. 2 seq # (0,1) mjaftojnë. Marrësi hedh poshtë kopjet e dyfishta.</div></div>
+    </div>
+    <div class="accordion">
+      <div class="acc-header" onclick="toggleAcc(this)"><span>rdt2.2 — NAK-free</span><span class="acc-icon">+</span></div>
+      <div class="acc-body"><div class="def">Vetëm ACK, pa NAK. Marrësi ACK-on pakon e fundit të marrë OK (specifikon seq #). ACK i dyfishtë = NAK. TCP përdor këtë qasje.</div></div>
+    </div>
+    <div class="accordion">
+      <div class="acc-header" onclick="toggleAcc(this)"><span>rdt3.0 — Kanal me gabime dhe humbje</span><span class="acc-icon">+</span></div>
+      <div class="acc-body"><div class="def">Kanalë i humb pako (data dhe ACK). Qasja: dërgusi pret "kohë të arsyeshme" për ACK → timer countdown. Nëse skadoi → retransmit. Seq # trajton duplikatet.</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Stop-and-Wait vs Pipelining</h2>
+    <div class="def"><strong>Stop-and-Wait</strong> — Dërgon 1 paketë, pret ACK. Performancë shumë e dobët!</div>
+    <div class="formula">Shembull: 1 Gbps link, 15ms propagation, 8000-bit packet<br>Utilization = (L/R) / (RTT + L/R) ≈ 0.00027 = 0.027%</div>
+    <div class="def"><strong>Pipelining</strong> — Dërgues lejon shumë pako "in-flight" pa ACK. Rrit utilizimin drastikisht. Kërkon: seq numbers të zgjeruara, buffering.</div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h2>Go-Back-N (GBN)</h2>
+      <ul class="clean">
+        <li>Window deri N pako pa ACK</li>
+        <li>Cumulative ACK(n) — ACK të gjitha deri n</li>
+        <li>Timeout(n) → retransmit n DHE të gjitha pas tij</li>
+        <li>Marrësi hedh poshtë out-of-order pako</li>
+        <li>Timer vetëm për pakon më të vjetër</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h2>Selective Repeat (SR)</h2>
+      <ul class="clean">
+        <li>Marrësi ACK-on çdo paketë individualisht</li>
+        <li>Buffer-on pako jashtë rendit</li>
+        <li>Dërgusi ka timer për çdo paketë unACKed</li>
+        <li>Timeout → retransmit VETËM atë paketë</li>
+        <li>Window size ≤ seq_space / 2 (për të shmangur konfuzionin!)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- TCP Details -->
+  <div class="card">
+    <div class="card-label" style="color:var(--accent)">TCP në Detaje</div>
+    <h2>TCP — Struktura dhe Funksionimi</h2>
+    <div class="def"><strong>MSS</strong> (Maximum Segment Size) — Madhësia maksimale e segmentit.</div>
+    <div class="def"><strong>Sequence Number</strong> — Byte-stream numri i bajtit të parë të segmentit.</div>
+    <div class="def"><strong>ACK Number</strong> — Seq # i bajtit tjetër të pritur nga ana tjetër. Cumulative ACK.</div>
+    <div class="formula">
+TCP Segment Header (fushat kryesore):
+- Source/Dest Port: 16 bit secili
+- Sequence Number: 32 bit
+- ACK Number: 32 bit
+- Header Length: 4 bit
+- ACK bit, RST, SYN, FIN bits
+- Receive Window (rwnd): 16 bit ← flow control
+- Checksum: 16 bit
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>TCP Round Trip Time (RTT) dhe Timeout</h2>
+    <div class="formula">
+EstimatedRTT = (1-α)·EstimatedRTT + α·SampleRTT    [α = 0.125]
+
+DevRTT = (1-β)·DevRTT + β·|SampleRTT - EstimatedRTT|   [β = 0.25]
+
+TimeoutInterval = EstimatedRTT + 4·DevRTT
+    </div>
+    <div class="def"><strong>EWMA</strong> (Exponential Weighted Moving Average) — Influenca e mostrave të vjetra zvogëlohet eksponencialisht. Smooth-on variacionet.</div>
+  </div>
+
+  <div class="card">
+    <h2>TCP Flow Control</h2>
+    <div class="def"><strong>Flow Control</strong> — Pengon dërguesin të "overflowojë" buffer-in e marrësit. Marrësi reklamojë <strong>rwnd</strong> (receive window / free buffer space) në header TCP.</div>
+    <div class="formula">
+Dërgusi limits: unACKed data ≤ rwnd
+RcvBuffer default: 4096 bytes (OS auto-adjust)
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>TCP 3-Way Handshake</h2>
+    <div class="def">Para shkëmbimit të të dhënave, dërgues/marrës "handshake-ojnë" për të rënë dakord mbi parametrat (ISN — Initial Sequence Number).</div>
+    <div class="formula">
+Hapi 1: Client → Server: SYN (SYN bit=1, seq=x)
+Hapi 2: Server → Client: SYNACK (SYN=1, ACK=1, seq=y, ack=x+1)
+Hapi 3: Client → Server: ACK (ACK=1, seq=x+1, ack=y+1)
+    </div>
+    <div class="def"><strong>Mbyllja e TCP:</strong> FIN bit=1. Secili anë mbyll vete. FIN → ACK. Mund të kombinohet FIN+ACK.</div>
+    <div class="def"><strong>Pse jo 2-way handshake?</strong> Variablat e vonesa, retransmissions, reordering e bën të pasigurt.</div>
+  </div>
+
+  <div class="card">
+    <h2>TCP Fast Retransmit</h2>
+    <div class="def">Nëse dërgusi merr <strong>3 ACK të dyfishta</strong> (triple duplicate ACK) → retransmit menjëherë para skadimit të timeoutit. Humbja e paketës detektohet shpejt.</div>
+  </div>
+</div>
+
+<!-- ========== LEKSION 4 — NETWORK ========== -->
+<div id="lect4" class="section">
+  <div class="section-title"><span class="icon">🗺️</span> Leksion 4: Network Layer</div>
+
+  <div class="card">
+    <div class="def"><strong>Network Layer</strong> — Transmeton segmentin nga hosti dërgues tek hosti marrës. Dërgusi encapsulates segmentet në datagrams → link layer. Protokollet e shtresës rrjetit gjenden në çdo pajisje Internet: hosts, routers.</div>
+    <div class="grid-2" style="margin-top:14px">
+      <div class="def"><strong>Forwarding</strong> — Lëviz paketat nga porta hyrëse e router-it tek porta dalje e duhur. (Trajtim i "një kryqëzimi")</div>
+      <div class="def"><strong>Routing</strong> — Përcakton rrugën e paketave nga burimi tek destinacioni. (Planifikimi i udhëtimit)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label" style="color:var(--accent)">IP Addressing</div>
+    <h2>IP Address: Hyrje</h2>
+    <div class="def"><strong>IP Address</strong> — Identifikues 32-bit i lidhur me çdo ndërfaqe host/router. Shprehet në notacion dotted-decimal (p.sh. 223.1.1.1).</div>
+    <div class="def"><strong>Ndërfaqe (Interface)</strong> — Lidhja midis host/router dhe link fizik. Router-ët kanë zakonisht shumë ndërfaqe.</div>
+  </div>
+
+  <div class="card">
+    <h2>Subnets dhe CIDR</h2>
+    <div class="def"><strong>Subnet</strong> — Ndërfaqe të pajisjes që mund të arrijnë njëra-tjetrën fizikisht pa kaluar nëpër router ndërmjetës. Pajisjet në të njëjtin subnet kanë high-order bits të njëjtë.</div>
+    <div class="def"><strong>CIDR</strong> (Classless InterDomain Routing, "cider") — Pjesa e subnet mund të jetë me gjatësi arbitrare. Format: <code>a.b.c.d/x</code> ku x = # bits të subnet.</div>
+    <div class="formula">
+Shembull: 200.23.16.0/20
+Subnet mask /24 = 255.255.255.0 (24 bits subnet, 8 bits host)
+2 adresa rezervohen: all-zeros (subnet) dhe all-ones (broadcast)
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>DHCP — Dynamic Host Configuration Protocol</h2>
+    <div class="def"><strong>DHCP</strong> — Hosti merr IP dinamikisht nga serveri kur "bashkohet" rrjetit. "Plug-and-play". Lejon ripërdorimin e adresave.</div>
+    <div class="formula">
+4 Fazat DHCP:
+1. DHCP Discover (broadcast nga klienti — opsional)
+2. DHCP Offer (serveri ofron IP — opsional)  
+3. DHCP Request (klienti kërkon IP)
+4. DHCP ACK (serveri konfirmon IP)
+    </div>
+    <div class="def">DHCP gjithashtu kthen: adresën e first-hop router, emrin dhe IP e DNS server, network mask.</div>
+    <div class="def">DHCP mesazhi encapsuluar në UDP, encapsuluar në IP, encapsuluar në Ethernet, broadcast (FFFFFFFFFFFF).</div>
+  </div>
+
+  <div class="card">
+    <h2>NAT — Network Address Translation</h2>
+    <div class="def"><strong>NAT</strong> — Të gjitha pajisjet e rrjetit lokal ndajnë 1 adresë IPv4 publike ndaj botës së jashtme. Private IP space: 10/8, 172.16/12, 192.168/16.</div>
+    <ul class="clean">
+      <li>1 IP adresë publike nga ISP për të gjitha pajisjet</li>
+      <li>Mund të ndryshosh adresat lokale pa notifikuar botën</li>
+      <li>Siguri: pajisjet lokale nuk janë drejtpërsëdrejti të adresueshme</li>
+    </ul>
+    <div class="formula">
+Dalje: (source IP, port) → (NAT IP, new port)
+Hyrje: (NAT IP, new port) → (source IP, port) [nga NAT table]
+    </div>
+    <div class="def" style="border-color:var(--red)"><strong>Kontroversë NAT:</strong> Routers "duhet" të procesojnë vetëm deri shtresën 3. Shkel argumentin end-to-end. Por: NAT është kudo (shtëpi, celulare, 4G/5G).</div>
+  </div>
+
+  <div class="card">
+    <h2>IPv6</h2>
+    <div class="def"><strong>Motivimi fillestar:</strong> 32-bit IPv4 address space do të shterrohej. IPv6: 128-bit space.</div>
+    <div class="formula">
+IPv6 Datagram Format (40-byte header fikse):
+- Version (4 bit)
+- Traffic class, Flow label
+- Payload length
+- Next header
+- Hop limit  
+- Source/Destination address (128 bit secili)
+
+Mungon (ndaj IPv4): Checksum, Fragmentation, Options
+    </div>
+    <div class="def"><strong>Tunneling</strong> — IPv6 datagrams si payload brenda IPv4 datagrams kur kalon nëpër routers IPv4 ("paketë brenda paketës"). Adoptim: ~40% klientë Google (2023).</div>
+  </div>
+
+  <div class="card">
+    <h2>Generalized Forwarding & OpenFlow</h2>
+    <div class="def"><strong>"Match + Action"</strong> — Abstraktim: match bits në paketën hyrëse, ndërmerr veprim. Generalized: shumë fusha header mund të përcaktojnë veprimin.</div>
+    <div class="def"><strong>Flow Table</strong> — Çdo router përmban. Entries: match pattern, priority, action (drop/forward/modify), counters.</div>
+    <table>
+      <tr><th>Pajisja</th><th>Match</th><th>Action</th></tr>
+      <tr><td>Router</td><td>Longest dest IP prefix</td><td>Forward mbi link</td></tr>
+      <tr><td>Switch</td><td>Destination MAC address</td><td>Forward ose flood</td></tr>
+      <tr><td>Firewall</td><td>IP + TCP/UDP port</td><td>Permit ose deny</td></tr>
+      <tr><td>NAT</td><td>IP + port</td><td>Rewrite address + port</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>Middleboxes</h2>
+    <div class="def"><strong>Middlebox</strong> (RFC 3234) — "Çdo kuti ndërmjetëse që kryen funksione jashtë funksioneve normale të IP router-it në rrugën e të dhënave midis hostit burimor dhe destinacionit."</div>
+    <ul class="clean">
+      <li>NAT — shtëpi, celulare, institucionale</li>
+      <li>Firewall, IDS — korporata, ISP</li>
+      <li>Load balancers — korporata, datacenter</li>
+      <li>Caches — ISP, mobile, CDN</li>
+    </ul>
+    <div class="def">Trendi: nga hardware i mbyllur → "whitebox" me open API → SDN + NFV (Network Functions Virtualization)</div>
+  </div>
+
+  <div class="card">
+    <h2>Principet Arkitekturore të Internetit</h2>
+    <div class="def"><em>"Qëllimi është lidhshmëria, mjet është IP protokolli, dhe inteligjenca është end-to-end e jo e fshehur brenda rrjetit."</em> (RFC 1958)</div>
+    <ul class="clean">
+      <li>Lidhshmëri e thjeshtë</li>
+      <li>IP si "ngushtësia e orës" (hourglass) — shtresa e vetme e pandryshuar</li>
+      <li>Inteligjenca dhe kompleksiteti — tek skajet e rrjetit (end systems)</li>
+    </ul>
+    <div class="def"><strong>End-to-End Argument</strong> — Funksione të caktuara (transmetim i besueshëm, congestion) mund të implementohen brenda rrjetit OSE tek skajet. Diskutim i vazhdueshëm!</div>
+  </div>
+</div>
+
+<!-- ========== QUIZ ========== -->
+<div id="quiz" class="section">
+  <div class="section-title"><span class="icon">✅</span> Kuiz Praktik — Testo Veten</div>
+
+  <div id="quiz-score" style="background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:18px; margin-bottom:24px; font-family:'IBM Plex Mono',monospace; font-size:0.9rem;">
+    Pikë: <span id="score-display">0</span> / <span id="total-display">0</span>
+    <div class="progress-bar" style="margin-top:8px"><div class="progress-fill" id="score-bar" style="width:0%"></div></div>
+    <div class="exam-mode">
+      <span class="timer-pill">⏱ Exam Timer: <span id="exam-timer">15:00</span></span>
+      <span>Mode: <span id="exam-mode-label">Normal</span></span>
+    </div>
+    <div class="hover-note">Hover mbi kartat e leksioneve për shpjegime shtesë. Në kuiz, çdo përgjigje jep feedback dhe mini-shpjegim për ta fiksuar konceptin.</div>
+  </div>
+
+  <div class="quiz-actions">
+    <button class="ghost-btn" onclick="toggleExamMode()">📝 Start/Stop Exam Mode</button>
+    <button class="ghost-btn" onclick="shuffleQuiz()">🔀 Përziej Pyetjet</button>
+    <button class="ghost-btn" onclick="rotateQuizVersion()">🔄 Ndërro Quizin</button>
+    <button class="ghost-btn" onclick="showQuizSummary()">📊 Raporti Final</button>
+    <button class="ghost-btn" onclick="resetQuiz()">↺ Rifillo Kuizin</button>
+  </div>
+
+  <div class="quiz-q" id="q1">
+    <p>1. Cila është formula e N² Problem-it (numri i lidhjeve direkte për N përdorues)?</p>
+    <div class="quiz-opt" onclick="checkAnswer(this,'wrong','q1')">N × 2</div>
+    <div class="quiz-opt" onclick="checkAnswer(this,'correct','q1')">N(N-1)/2</div>
+    <div class="quiz-opt" onclick="checkAnswer(this,'wrong','q1')">N²</div>
+    <div class="quiz-opt" onclick="checkAnswer(this,'wrong','q1')">2^N</div>
+    <div class="quiz-check" id="q1-msg"></div>
+  </div>
+
+  <div class="quiz-q" id="q2">
+    <p>2. HTTP është "stateless". Çfarë përdoret për të ruajtur gjendjen?</p>
+    <div class="quiz-opt" onclick="checkAnswer(this,'wrong','q2')">Sessions</div>
+    <div class="quiz-opt" onclick="checkAnswer(this,'correct','q2')">Cookies</div>
+    <div class="quiz-opt" onclick="checkAnswer(this,'wrong','q2')">Tokens</div>
+    <div class="quiz-opt" onclick="checkAnswer(this,'wrong','q2')">Cache</div>
+    <div class="quiz-check" id="q2-msg"></div>
+  </div>
+
+  <div class="quiz-q" id="q3">
+    <p>3. DNS query-t dërgohen mbi cilën shtresë transport dhe cilën port?</p>
+    <div class="quiz-opt" onclick="checkAnswer(this,'wrong','q3')">TCP, Port 80</div>
+    <div class="quiz-opt" onclick="checkAnswer(this,'wrong','q3')">UDP vetëm, Port 53</div>
+    <div class="quiz-opt" onclick="checkAnswer(this,'correct','q3')">UDP dhe TCP, Port 53</div>
+    <div class="quiz-opt" onclick="checkAnswer(this,'wrong','q3')">TCP, Port 25</div>
+    <div class="quiz-check" id="q3-msg"></div>
+  </div>
+
+  <div class="quiz-q" id="q4">
+    <p>4. TCP demultiplexing përdor:</p>
+    <div class="quiz-opt" onclick="checkAnswer(this,'wrong','q4')">Vetëm destination port number</div>
+    <div class="quiz-opt" onclick="checkAnswer(this,'wrong','q4')">Source IP + Destination IP</div>
+    <div class="quiz-opt" onclick="checkAnswer(this,'correct','q4')">4-tuple: Source IP, Source Port, Dest IP, Dest Port</div>
+    <div class="quiz-opt" onclick="checkAnswer(this,'wrong','q4')">MAC address</div>
+    <div class="quiz-check" id="q4-msg"></div>
+  </div>
+
+  <div class="quiz-q" id="q5">
+    <p>5. Cila DNS query konsiderohet "best practice" dhe pse?</p>
+    <div class="quiz-opt" onclick="checkAnswer(this,'wrong','q5')">Recursive — sepse distriboon ngarkesën</div>
+    <div class="quiz-opt" onclick="checkAnswer(this,'correct','q5')">Iterative — sepse ulet ngarkesa tek Root/TLD servers</div>
+    <div class="quiz-opt" onclick="checkAnswer(this,'wrong','q5')">Recursive — sepse është më e shpejtë</div>
+    <div class="quiz-opt" onclick="checkAnswer(this,'wrong','q5')">Iterative — sepse klienti nuk duhet të presë</div>
+    <div class="quiz-check" id="q5-msg"></div>
+  </div>
+
+  <div class="quiz-q" id="q6">
+    <p>6. Cila është formula e TimeoutInterval në TCP?</p>
+    <div class="quiz-opt" onclick="checkAnswer(this,'wrong','q6')">EstimatedRTT × 2</div>
+    <div class="quiz-opt" onclick="checkAnswer(this,'wrong','q6')">SampleRTT + DevRTT</div>
+    <div class="quiz-opt" onclick="checkAnswer(this,'correct','q6')">EstimatedRTT + 4 × DevRTT</div>
+    <div class="quiz-opt" onclick="checkAnswer(this,'wrong','q6')">EstimatedRTT + 2 × DevRTT</div>
+    <div class="quiz-check" id="q6-msg"></div>
+  </div>
+
+  <div class="quiz-q" id="q7">
+    <p>7. Çfarë mungon në IPv6 krahasuar me IPv4?</p>
+    <div class="quiz-opt" onclick="checkAnswer(this,'wrong','q7')">Adresa source dhe destination</div>
+    <div class="quiz-opt" onclick="checkAnswer(this,'correct','q7')">Checksum, Fragmentation, Options</div>
+    <div class="quiz-opt" onclick="checkAnswer(this,'wrong','q7')">Flow label dhe hop limit</div>
+    <div class="quiz-opt" onclick="checkAnswer(this,'wrong','q7')">Version field</div>
+    <div class="quiz-check" id="q7-msg"></div>
+  </div>
+
+  <div class="quiz-q" id="q8">
+    <p>8. SMTP përdor cilën metodë (push/pull) dhe cilin port?</p>
+    <div class="quiz-opt" onclick="checkAnswer(this,'wrong','q8')">Pull, Port 80</div>
+    <div class="quiz-opt" onclick="checkAnswer(this,'correct','q8')">Push, Port 25</div>
+    <div class="quiz-opt" onclick="checkAnswer(this,'wrong','q8')">Push, Port 110</div>
+    <div class="quiz-opt" onclick="checkAnswer(this,'wrong','q8')">Pull, Port 25</div>
+    <div class="quiz-check" id="q8-msg"></div>
+  </div>
+
+  <div class="quiz-q" id="q9">
+    <p>9. Cila është dallimi kryesor mes Go-Back-N dhe Selective Repeat?</p>
+    <div class="quiz-opt" onclick="checkAnswer(this,'correct','q9')">GBN retransmit të gjitha pas timeout; SR retransmit vetëm paketën specifike</div>
+    <div class="quiz-opt" onclick="checkAnswer(this,'wrong','q9')">SR nuk ka buffer; GBN ka buffer</div>
+    <div class="quiz-opt" onclick="checkAnswer(this,'wrong','q9')">GBN ka window size 1; SR ka N</div>
+    <div class="quiz-opt" onclick="checkAnswer(this,'wrong','q9')">Nuk ka dallim, janë ekuivalente</div>
+    <div class="quiz-check" id="q9-msg"></div>
+  </div>
+
+  <div class="quiz-q" id="q10">
+    <p>10. Çfarë kthen DHCP (përveç IP adresës)?</p>
+    <div class="quiz-opt" onclick="checkAnswer(this,'wrong','q10')">Vetëm IP adresën e klientit</div>
+    <div class="quiz-opt" onclick="checkAnswer(this,'correct','q10')">IP, First-hop router, DNS server name/IP, Network mask</div>
+    <div class="quiz-opt" onclick="checkAnswer(this,'wrong','q10')">IP dhe MAC address</div>
+    <div class="quiz-opt" onclick="checkAnswer(this,'wrong','q10')">IP dhe subnet mask vetëm</div>
+    <div class="quiz-check" id="q10-msg"></div>
+  </div>
+
+  <div class="quiz-q" id="q11">
+    <p>11. Cili pohim për HTTP/2 është i saktë?</p>
+    <div class="quiz-opt" onclick="checkAnswer(this,'wrong','q11')">Përdor vetëm UDP dhe heq TCP</div>
+    <div class="quiz-opt" onclick="checkAnswer(this,'correct','q11')">Përdor frames të ndërmishëm për të ulur HOL blocking</div>
+    <div class="quiz-opt" onclick="checkAnswer(this,'wrong','q11')">Nuk mbështet prioritet mes objekteve</div>
+    <div class="quiz-opt" onclick="checkAnswer(this,'wrong','q11')">Nuk punon me browser modern</div>
+    <div class="quiz-check" id="q11-msg"></div>
+  </div>
+
+  <div class="quiz-q" id="q12">
+    <p>12. Në UDP demultiplexing, datagramet drejtohen te socket-i bazuar kryesisht në:</p>
+    <div class="quiz-opt" onclick="checkAnswer(this,'correct','q12')">Destination port number</div>
+    <div class="quiz-opt" onclick="checkAnswer(this,'wrong','q12')">Source MAC address</div>
+    <div class="quiz-opt" onclick="checkAnswer(this,'wrong','q12')">TTL + Checksum</div>
+    <div class="quiz-opt" onclick="checkAnswer(this,'wrong','q12')">Destination hostname</div>
+    <div class="quiz-check" id="q12-msg"></div>
+  </div>
+
+  <div class="quiz-q" id="q13">
+    <p>13. Cila është një avantazh praktik i NAT?</p>
+    <div class="quiz-opt" onclick="checkAnswer(this,'wrong','q13')">I bën të gjitha hostet publike me IP unike</div>
+    <div class="quiz-opt" onclick="checkAnswer(this,'correct','q13')">Lejon shumë pajisje lokale të ndajnë një IP publike</div>
+    <div class="quiz-opt" onclick="checkAnswer(this,'wrong','q13')">Eliminon nevojën për routing table</div>
+    <div class="quiz-opt" onclick="checkAnswer(this,'wrong','q13')">Heq nevojën për DNS</div>
+    <div class="quiz-check" id="q13-msg"></div>
+  </div>
+
+  <div class="quiz-q" id="q14">
+    <p>14. Tek rdt3.0, çfarë ndodh kur timer-i skadon para marrjes së ACK?</p>
+    <div class="quiz-opt" onclick="checkAnswer(this,'wrong','q14')">Marrësi ndryshon portin</div>
+    <div class="quiz-opt" onclick="checkAnswer(this,'wrong','q14')">Dërguesi mbyll lidhjen përgjithmonë</div>
+    <div class="quiz-opt" onclick="checkAnswer(this,'correct','q14')">Dërguesi retransmeton paketën</div>
+    <div class="quiz-opt" onclick="checkAnswer(this,'wrong','q14')">DNS rifillon query</div>
+    <div class="quiz-check" id="q14-msg"></div>
+  </div>
+
+  <div class="quiz-q" id="q15">
+    <p>15. Cili kombinim përshkruan saktë tri skenarët e 5G?</p>
+    <div class="quiz-opt" onclick="checkAnswer(this,'wrong','q15')">eMBB = sensorë, URLLC = email, mMTC = gaming</div>
+    <div class="quiz-opt" onclick="checkAnswer(this,'correct','q15')">eMBB = broadband i pasur, URLLC = latency shumë e ulët, mMTC = shumë pajisje IoT</div>
+    <div class="quiz-opt" onclick="checkAnswer(this,'wrong','q15')">eMBB = vetëm voice call, URLLC = pa reliability, mMTC = vetëm video</div>
+    <div class="quiz-opt" onclick="checkAnswer(this,'wrong','q15')">Asnjë nga këto</div>
+    <div class="quiz-check" id="q15-msg"></div>
+  </div>
+
+  <div class="quiz-feedback" id="quiz-feedback"></div>
+  <div class="quiz-feedback" id="quiz-dashboard" style="display:block;">
+    <strong>Progres i Shpejtë</strong>
+    <div class="dash-grid">
+      <div class="dash-item"><div class="dash-k">Saktësi</div><div class="dash-v" id="dash-accuracy">0%</div></div>
+      <div class="dash-item"><div class="dash-k">Përgjigjura</div><div class="dash-v" id="dash-answered">0</div></div>
+      <div class="dash-item"><div class="dash-k">Pa përgjigje</div><div class="dash-v" id="dash-unanswered">0</div></div>
+      <div class="dash-item"><div class="dash-k">Niveli</div><div class="dash-v" id="dash-level">Fillestar</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== TEMPLATE KOLLOKFIUMI ========== -->
+<div id="koll-template" class="section">
+  <div class="section-title"><span class="icon">🧾</span> Template i Kollokfiumit</div>
+
+  <div class="card">
+    <div class="card-label" style="color:var(--accent)">Pyetje + Zgjidhje</div>
+    <h2>Version praktik për përgatitje</h2>
+    <div class="def">Ky sektor përmbledh pyetjet dhe përgjigjet nga një template i kollokfiumit.</div>
+  </div>
+
+  <div class="accordion">
+    <div class="acc-header" onclick="toggleAcc(this)"><span>1) Trupi standardizues i RFC-ve (HTTP, DNS)</span><span class="acc-icon">+</span></div>
+    <div class="acc-body">
+      <ul class="clean">
+        <li>a) ITU (International Telecommunication Union)</li>
+        <li>b) IEEE (Institute of Electrical and Electronics Engineers)</li>
+        <li>c) W3C (World Wide Web Consortium)</li>
+        <li>d) IETF (Internet Engineering Task Force)</li>
+      </ul>
+      <div class="def"><strong>Përgjigjja e saktë:</strong> d) IETF (Internet Engineering Task Force)</div>
+      <ul class="clean">
+        <li>IETF publikon RFC (Request for Comments) për protokollet bazë të Internetit.</li>
+        <li>ITU fokusohet më shumë te telekomunikacioni klasik.</li>
+        <li>IEEE standardizon kryesisht Link/Physical layer (p.sh. 802.3, 802.11).</li>
+        <li>W3C fokusohet te standardet Web si HTML/CSS.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="acc-header" onclick="toggleAcc(this)"><span>2) Bluetooth miu-PC i përket cilit rrjet?</span><span class="acc-icon">+</span></div>
+    <div class="acc-body">
+      <ul class="clean">
+        <li>a) LAN</li>
+        <li>b) WAN</li>
+        <li>c) MAN</li>
+        <li>d) PAN</li>
+      </ul>
+      <div class="def"><strong>Përgjigjja e saktë:</strong> d) PAN (Personal Area Network)</div>
+      <div class="def">PAN mbulon zakonisht rreth 10 metra dhe lidh pajisje personale (Bluetooth, kufje, mouse, etj.).</div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="acc-header" onclick="toggleAcc(this)"><span>3) Cila gjeneratë solli SMS dhe digjitalizim të plotë?</span><span class="acc-icon">+</span></div>
+    <div class="acc-body">
+      <ul class="clean">
+        <li>a) 1G</li>
+        <li>b) 2G</li>
+        <li>c) 3G</li>
+        <li>d) 4G</li>
+      </ul>
+      <div class="def"><strong>Përgjigjja e saktë:</strong> b) 2G</div>
+      <div class="def">1G ishte analoge; 2G (GSM) ishte gjenerata e parë plotësisht digjitale me SMS.</div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="acc-header" onclick="toggleAcc(this)"><span>4) Llogaritja PCM (8 bit, 8000 mostra/s)</span><span class="acc-icon">+</span></div>
+    <div class="acc-body">
+      <ul class="clean">
+        <li>a) 1.544 × 10^6 bps</li>
+        <li>b) 10 × 10^6 bps</li>
+        <li>c) 8000 bps</li>
+        <li>d) 64 × 10^3 bps</li>
+      </ul>
+      <div class="formula">Shpejtësia = 8000 × 8 = 64,000 bps = 64 kbps</div>
+      <div class="def"><strong>Përgjigjja e saktë:</strong> d) 64 × 10^3 bps (64 kbps)</div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="acc-header" onclick="toggleAcc(this)"><span>5) CS vs P2P (etiketimi)</span><span class="acc-icon">+</span></div>
+    <div class="acc-body">
+      <ul class="clean">
+        <li><strong>CS:</strong> server gjithmonë aktiv, IP e njohur, klientët nuk komunikojnë direkt.</li>
+        <li><strong>P2P:</strong> sistemet fundore komunikojnë direkt; hosti mund të jetë edhe client edhe server.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="acc-header" onclick="toggleAcc(this)"><span>6) HTTP: Saktë (S) / Pasaktë (P)</span><span class="acc-icon">+</span></div>
+    <div class="acc-body">
+      <ul class="clean">
+        <li><strong>(S)</strong> 1 tekst + 3 imazhe → 4 response messages.</li>
+        <li><strong>(S)</strong> Faqe të ndryshme nga i njëjti host mund të kalojnë në të njëjtën lidhje persistente.</li>
+        <li><strong>(P)</strong> Te non-persistent, i njëjti segment TCP nuk bart dy kërkesa HTTP të ndryshme.</li>
+        <li><strong>(P)</strong> Date nuk tregon modifikimin e fundit; atë e tregon Last-Modified.</li>
+        <li><strong>(P)</strong> HTTP response mund të ketë body bosh (p.sh. 304, 204).</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h2>7) Analiza e HTTP GET</h2>
+      <div class="def"><strong>URL:</strong> http://gala.cs.umass.edu/cs453/index.html</div>
+      <div class="def"><strong>Lidhja:</strong> Persistente (Connection: keep-alive)</div>
+      <div class="def"><strong>Versioni:</strong> HTTP/1.1</div>
+    </div>
+    <div class="card">
+      <h2>8) Analiza e HTTP Response</h2>
+      <div class="def"><strong>Suksesi:</strong> Po (200 OK)</div>
+      <div class="def"><strong>Last-Modified:</strong> Sat, 10 Dec 2005 18:27:46 GMT</div>
+      <div class="def"><strong>Content-Length:</strong> 3874 bytes</div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="acc-header" onclick="toggleAcc(this)"><span>9) DNS recursive query me cache (rasti t=5)</span><span class="acc-icon">+</span></div>
+    <div class="acc-body">
+      <div class="def"><strong>Kërkesa:</strong> ee.mit.edu në t=5</div>
+      <div class="def">Nga kërkesat e mëparshme, Local DNS ka cache për Root dhe TLD .edu, prandaj shmang disa hapa.</div>
+      <ul class="clean">
+        <li>Host -> Local DNS (1 njësi)</li>
+        <li>Local DNS -> Authoritative (1 njësi)</li>
+        <li>Authoritative -> Local DNS (1 njësi)</li>
+        <li>Local DNS -> Host (1 njësi)</li>
+      </ul>
+      <div class="formula">Koha totale = 4 njësi kohe</div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h2>10) RR Type për (uni-pr.edu, dns.uni-pr.edu)</h2>
+      <ul class="clean">
+        <li>a) MX</li>
+        <li>b) NS</li>
+        <li>c) A</li>
+        <li>d) CNAME</li>
+      </ul>
+      <div class="def"><strong>Përgjigjja:</strong> b) NS</div>
+      <div class="def">NS tregon serverin autoritativ për një domain.</div>
+    </div>
+    <div class="card">
+      <h2>11) Çfarë ofron UDP?</h2>
+      <ul class="clean">
+        <li>a) Transmetim i besueshëm i të dhënave</li>
+        <li>b) Shpejtësi e garantuar e transmetimit</li>
+        <li>c) Kohë minimale e garantuar e transmetimit</li>
+        <li>d) Shërbim best-effort</li>
+        <li>e) Kontroll të mbingarkesës</li>
+      </ul>
+      <div class="def"><strong>Përgjigjja:</strong> d) Best-effort</div>
+      <div class="def">UDP nuk garanton reliability, renditje, congestion control apo throughput minimal.</div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="acc-header" onclick="toggleAcc(this)"><span>12) Checksum 16-bit (one's complement)</span><span class="acc-icon">+</span></div>
+    <div class="acc-body">
+      <div class="def">Sipas hapave të llogaritjes së dhënë, pas mbledhjes dhe carry, shuma finale invert-ohet.</div>
+      <div class="formula">Checksum final: 0010100000001101</div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="acc-header" onclick="toggleAcc(this)"><span>14) Go-Back-N: humbje pakete dhe timeout 9 njësi</span><span class="acc-icon">+</span></div>
+    <div class="acc-body">
+      <div class="def">Parimi kyç: kur skadon timeout i paketës më të vjetër unACKed, ridërgohet ajo dhe të gjitha pas saj (go-back).</div>
+      <ul class="clean">
+        <li>Nëse PKT0 humbet, marrësi refuzon paketat jashtë rendit dhe dërgon duplicate ACK për paketën e fundit në rregull.</li>
+        <li>Pas timeout-it, dërguesi ridërgon PKT0, PKT1, PKT2, ... sipas dritares.</li>
+        <li>Dritarja zhvendoset vetëm pasi vijnë ACK kumulative në rregull.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="acc-header" onclick="toggleAcc(this)"><span>15) EstimatedRTT (α = 0.125)</span><span class="acc-icon">+</span></div>
+    <div class="acc-body">
+      <div class="formula">EstimatedRTT = (1-α)·EstimatedRTT + α·SampleRTT</div>
+      <ul class="clean">
+        <li>Pas 270ms -> 243.75 ms</li>
+        <li>Pas 200ms -> 238.28 ms</li>
+        <li>Pas 290ms -> 244.74 ms</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ========== FLASHCARDS ========== -->
+<div id="flashcards" class="section">
+  <div class="section-title"><span class="icon">🧠</span> Flashcards — Përsëritje Interaktive</div>
+
+  <div class="card flash-wrap">
+    <div class="quiz-actions" style="margin:0">
+      <select class="subnet-input" id="flash-lecture" style="max-width:280px; margin:0" onchange="setFlashLecture(this.value)">
+        <option value="lect1">Leksion 1 Flashcards</option>
+        <option value="lect2">Leksion 2 Flashcards</option>
+        <option value="lect3">Leksion 3 Flashcards</option>
+        <option value="lect4">Leksion 4 Flashcards</option>
+      </select>
+    </div>
+    <div class="flash-meta">
+      <span id="flash-index">Karta 1 / 8</span>
+      <span>Mëso me ritëm: pyetje → mendo → shfaq përgjigjen</span>
+    </div>
+
+    <div class="flash-card" id="flash-card">
+      <div class="flash-side-label">Pyetje</div>
+      <div class="flash-question" id="flash-question">Çfarë dallon host-me-host nga proces-me-proces?</div>
+      <div class="flash-answer" id="flash-answer"></div>
+    </div>
+
+    <div class="quiz-actions" style="margin:0">
+      <button class="ghost-btn" onclick="prevFlashcard()">⟵ Para</button>
+      <button class="ghost-btn" onclick="toggleFlashAnswer()">👁️ Shfaq/Fsheh Përgjigjen</button>
+      <button class="ghost-btn" onclick="nextFlashcard()">Pas ⟶</button>
+      <button class="ghost-btn" onclick="shuffleFlashcards()">🔀 Shuffle Cards</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== PACKET LAB ========== -->
+<div id="packetlab" class="section">
+  <div class="section-title"><span class="icon">📨</span> Packet Lab — UDP dhe TCP/ACK</div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-label" style="color:var(--accent4)">UDP Datagram</div>
+      <h2>One-way delivery (me mundësi humbjeje)</h2>
+      <div class="def"><strong>UDP</strong> nuk pret ACK. Datagrama dërgohet një herë; nëse humbet, aplikacioni vendos çfarë bën.</div>
+      <div class="quiz-actions" style="margin-top:8px">
+        <button class="ghost-btn" onclick="runUdpDemo(false)">▶️ Dërgo Datagram</button>
+        <button class="ghost-btn" onclick="runUdpDemo(true)">⚠️ Simulo Humbje</button>
+        <button class="ghost-btn" onclick="nextPacketCheckpoint('udp')">➡️ Next Checkpoint</button>
+        <button class="ghost-btn" onclick="resetPacketCheckpoint('udp')">↺ Reset Checkpoints</button>
+      </div>
+      <div class="step-chip" id="udp-step-chip">UDP Checkpoint: 0</div>
+      <div class="lane" id="udp-lane">
+        <div class="lane-track"></div>
+        <div class="lane-end left">Sender</div>
+        <div class="lane-end right">Receiver</div>
+        <div class="packet" id="udp-packet">UDP DATA</div>
+      </div>
+      <div class="packet-log" id="udp-log">Gati për demonstrim.</div>
+      <div class="packet-explain" id="udp-explain">Kur humbet një UDP packet, nuk ka ACK automatik; aplikacioni duhet të vendosë për retry ose ta injorojë humbjen.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-label" style="color:var(--accent3)">TCP Connection + ACK</div>
+      <h2>Handshake dhe ACK behavior</h2>
+      <div class="def"><strong>TCP</strong> përdor SYN → SYN-ACK → ACK, pastaj dërgim të dhënash me ACK kthyes për reliability.</div>
+      <div class="quiz-actions" style="margin-top:8px">
+        <button class="ghost-btn" onclick="runTcpDemo()">▶️ Start TCP Demo</button>
+        <button class="ghost-btn" onclick="runTcpRetransmitDemo()">🔁 Loss + Fast Retransmit</button>
+        <button class="ghost-btn" onclick="nextPacketCheckpoint('tcp')">➡️ Next Checkpoint</button>
+        <button class="ghost-btn" onclick="resetPacketCheckpoint('tcp')">↺ Reset Checkpoints</button>
+      </div>
+      <div class="step-chip" id="tcp-step-chip">TCP Checkpoint: 0</div>
+      <div class="lane" id="tcp-lane">
+        <div class="lane-track"></div>
+        <div class="lane-end left">Client</div>
+        <div class="lane-end right">Server</div>
+        <div class="packet tcp" id="tcp-packet">SYN</div>
+      </div>
+      <div class="packet-log" id="tcp-log">Kliko Start për të parë hapat.</div>
+      <div class="packet-explain" id="tcp-explain">Në TCP, humbja zakonisht zbulohet me timeout ose duplicate ACK; pastaj ndodh retransmetim dhe rrjedha rikuperohet.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-label" style="color:var(--accent)">Checksum Demo</div>
+      <h2>16-bit One's Complement (TCP/UDP Header)</h2>
+      <div class="def"><strong>Qëllimi:</strong> të shohësh qartë si llogaritet checksum me mbledhje 16-bit, wrap-around carry dhe komplement final.</div>
+      <div class="checksum-details">
+        <h3>Si ndodh i gjithë procesi?</h3>
+        <ol>
+          <li>Paketa ndahet në fjalë 16-bit (header + data, me pad nëse duhet).</li>
+          <li>Të gjitha fjalët mblidhen me one's complement addition.</li>
+          <li>Nëse del carry nga biti i 17-të, carry kthehet mbrapsht te 16 bitët.</li>
+          <li>Në fund bëhet invertimi bit-për-bit dhe ai rezultat vendoset si checksum.</li>
+          <li>Marrësi e bën të njëjtën llogaritje; rezultat i saktë jep all-ones (validim).</li>
+        </ol>
+      </div>
+
+      <div class="checksum-grid">
+        <input class="subnet-input" id="checksum-in-1" placeholder="W1 hex (p.sh. 6666)" value="6666">
+        <input class="subnet-input" id="checksum-in-2" placeholder="W2 hex (p.sh. BBBB)" value="BBBB">
+        <input class="subnet-input" id="checksum-in-3" placeholder="W3 hex (p.sh. B5D0)" value="B5D0">
+      </div>
+      <div class="quiz-actions" style="margin-top:8px">
+        <button class="ghost-btn" onclick="applyChecksumInputs()">🧾 Përdor Input-et</button>
+        <button class="ghost-btn" onclick="randomizeChecksumInputs()">🎲 Gjenero Vlera</button>
+        <button class="ghost-btn" onclick="playChecksumDemo()">▶️ Play Demo</button>
+        <button class="ghost-btn" onclick="nextChecksumCheckpoint()">➡️ Next Checkpoint</button>
+        <button class="ghost-btn" onclick="resetChecksumCheckpoint()">↺ Reset</button>
+      </div>
+      <div class="step-chip" id="checksum-step-chip">Checksum Checkpoint: 0/6</div>
+
+      <div class="checksum-board" id="checksum-board">
+        <div class="checksum-word" id="checksum-word-1">W1: 0110011001100110 (0x6666)</div>
+        <div class="checksum-word" id="checksum-word-2">W2: 1011101110111011 (0xBBBB)</div>
+        <div class="checksum-word" id="checksum-word-3">W3: 1011010111010000 (0xB5D0)</div>
+        <div class="checksum-word result" id="checksum-word-final">Checksum: ?</div>
+      </div>
+
+      <div class="checksum-equation" id="checksum-equation">Kliko Play ose Next për të nisur llogaritjen hap pas hapi.</div>
+      <div class="packet-log" id="checksum-log">Gati për demonstrim checksum.</div>
+      <div class="packet-explain" id="checksum-explain">Checkpoint-at tregojnë çdo transformim: add, carry wrap-around, pastaj one's complement.</div>
+
+      <div class="checksum-details" style="margin-top:12px">
+        <h3>Mini Kuiz: Gjej Checksum-in Vetë</h3>
+        <div class="def">Do të marrësh 3 fjalë 16-bit. Llogarit checksum-in dhe shkruaje në HEX (4 shifra, p.sh. 1A2F).</div>
+        <div class="packet-log" id="checksum-quiz-question">Pyetja do gjenerohet sapo të hapet faqja.</div>
+        <div class="checksum-grid" style="grid-template-columns: 1fr 180px;">
+          <input class="subnet-input" id="checksum-quiz-answer" placeholder="Checksum HEX">
+          <button class="ghost-btn" onclick="submitChecksumQuizAnswer()">Kontrollo</button>
+        </div>
+        <div class="quiz-actions" style="margin-top:8px">
+          <button class="ghost-btn" onclick="generateChecksumQuizRound()">➡️ Pyetja Tjetër</button>
+          <button class="ghost-btn" onclick="resetChecksumQuiz()">↺ Reset Pikët</button>
+        </div>
+        <div class="checksum-score" id="checksum-quiz-score">Pikë: 0/0 (0%)</div>
+        <div class="packet-explain" id="checksum-quiz-feedback">Zgjidh një pyetje dhe provo llogaritjen.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SUBNET LAB ========== -->
+<div id="subnetlab" class="section">
+  <div class="section-title"><span class="icon">🧮</span> Subnet Lab — Animacion dhe Praktikë</div>
+
+  <div class="card">
+    <div class="card-label" style="color:var(--accent)">Si ta zgjidhësh çdo detyrë subnetting</div>
+    <h2>Metodë e qartë me 5 hapa</h2>
+    <ul class="clean">
+      <li><strong>Hapi 1:</strong> Gjej prefix/maskën dhe numrin e host-bitëve: <span class="mono">host bits = 32 - prefix</span>.</li>
+      <li><strong>Hapi 2:</strong> Llogarit block-size në oktetin interesant: <span class="mono">256 - maskOctet</span>.</li>
+      <li><strong>Hapi 3:</strong> Gjej subnet number: okteti i IP rrumbullakohet poshtë në shumëfish të block-size.</li>
+      <li><strong>Hapi 4:</strong> Broadcast = subnet next - 1.</li>
+      <li><strong>Hapi 5:</strong> Host range = subnet + 1 deri broadcast - 1, hosts = <span class="mono">2^hostBits - 2</span>.</li>
+    </ul>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-label" style="color:var(--accent4)">Animacion Hap-Pas-Hapi</div>
+      <h2>Si e zgjidhim një subnet?</h2>
+      <div class="def">Shembull animativ: <strong id="anim-target">192.168.45.173/27</strong>. Kliko play për të parë rrjedhën logjike nga maska deri te host range.</div>
+      <div class="quiz-actions" style="margin-top:12px">
+        <button class="ghost-btn" onclick="playSubnetAnimation()">▶️ Play</button>
+        <button class="ghost-btn" onclick="nextSubnetStep()">⏭️ Next Step</button>
+        <button class="ghost-btn" onclick="resetSubnetAnimation()">↺ Reset</button>
+      </div>
+      <div class="subnet-steps">
+        <div class="step-card" id="subnet-step-box">
+          <div class="step-label" id="subnet-step-title">Hapi 1</div>
+          <div id="subnet-step-content">Kliko Play për të nisur animacionin.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-label" style="color:var(--accent3)">Subnet Practice</div>
+      <h2>Praktikë me pyetje gjeneruese</h2>
+      <div class="def">Detyra aktuale: <strong id="practice-target">-</strong></div>
+      <input class="subnet-input" id="practice-network" placeholder="Network Address (p.sh. 192.168.10.0)">
+      <input class="subnet-input" id="practice-broadcast" placeholder="Broadcast Address (p.sh. 192.168.10.255)">
+      <input class="subnet-input" id="practice-hosts" placeholder="Hosts të përdorshëm (p.sh. 62)">
+      <div class="quiz-actions" style="margin-top:6px">
+        <button class="ghost-btn" onclick="checkSubnetPractice()">✅ Kontrollo</button>
+        <button class="ghost-btn" onclick="generateSubnetPractice()">🎲 Gjenero tjetër</button>
+      </div>
+      <div class="subnet-result" id="practice-result"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label" style="color:var(--accent2)">IP Binary Lab</div>
+    <h2>Decimal ↔ Binary</h2>
+    <div class="grid-2">
+      <div>
+        <h3>IPv4 në binar</h3>
+        <input class="subnet-input" id="dec-ip" placeholder="p.sh. 172.16.5.9">
+        <button class="ghost-btn" onclick="convertIpToBinary()">Kthe në binar</button>
+        <div class="bin-line" id="ip-binary-output">00000000.00000000.00000000.00000000</div>
+      </div>
+      <div>
+        <h3>Binar në IPv4</h3>
+        <input class="subnet-input" id="bin-ip" placeholder="p.sh. 10101100.00010000.00000101.00001001">
+        <button class="ghost-btn" onclick="convertBinaryToIp()">Kthe në decimal</button>
+        <div class="bin-line" id="ip-decimal-output">0.0.0.0</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="display:none;" aria-hidden="true">
+    <div class="card-label" style="color:var(--accent4)">CCNA Problem Sets me Zgjidhje</div>
+    <h2>Setet që dërgove: PS1, PS2, PS3, PS4, PS5 (interaktiv)</h2>
+    <p class="small-muted">Zgjidh një set dhe problem. Sistemi tregon pyetjen dhe zgjidhjen/reference answer.</p>
+    <div class="practice-grid" style="margin-top:10px">
+      <div>
+        <label class="small-muted" for="ps-set">Problem Set</label>
+        <select class="subnet-input" id="ps-set" onchange="loadProblemSet()">
+          <option value="ps1">PS1: Mask format conversion</option>
+          <option value="ps2">PS2: Classful analysis</option>
+          <option value="ps3">PS3: Interpret existing masks</option>
+          <option value="ps4">PS4: Choosing subnet masks</option>
+          <option value="ps5">PS5: Address in existing subnet</option>
+        </select>
+      </div>
+      <div>
+        <label class="small-muted" for="ps-index">Problem Number</label>
+        <select class="subnet-input" id="ps-index" onchange="showProblemDetails()"></select>
+      </div>
+    </div>
+    <div class="subnet-result" id="ps-question" style="display:block; margin-top:8px;"></div>
+    <textarea class="subnet-input" id="ps-user-answer" rows="3" placeholder="Shkruaj përgjigjen me fjalë kyçe (p.sh. /23, 255.255.254.0, hosts=126, network=10.0.0.0)"></textarea>
+    <div class="quiz-actions" style="margin-top:10px">
+      <button class="ghost-btn" onclick="checkProblemAnswer()">✅ Check Answer</button>
+      <button class="ghost-btn" onclick="toggleProblemAnswer()">👁️ Shfaq/Fsheh Zgjidhjen</button>
+    </div>
+    <div class="subnet-result" id="ps-check-result"></div>
+    <div class="subnet-result" id="ps-answer"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-label" style="color:var(--accent3)">VLSM Mini-Solver (PS8)</div>
+    <h2>Gjej subnet-in e ri pa overlap</h2>
+    <p class="small-muted">Përfshin 2 skenarët që dërgove: smallest/largest available subnet number.</p>
+    <select class="subnet-input" id="vlsm-case">
+      <option value="1">Case 1: 172.30.0.0, 300 hosts, numerically smallest</option>
+      <option value="2">Case 2: 192.168.1.0, 13 hosts, numerically largest</option>
+    </select>
+    <div class="quiz-actions" style="margin-top:6px">
+      <button class="ghost-btn" onclick="solveVlsmCase()">🧠 Solve VLSM</button>
+    </div>
+    <div class="subnet-result" id="vlsm-result"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-label" style="color:var(--accent2)">Mini Subnet Quiz — Ekstra Detyra</div>
+    <h2>3 pyetje të shpejta me shpjegim</h2>
+    <div class="def" id="mini-subnet-q">Pyetja do shfaqet këtu.</div>
+    <div id="mini-subnet-options"></div>
+    <div class="quiz-actions" style="margin-top:8px">
+      <button class="ghost-btn" onclick="nextMiniSubnetQuestion()">➡️ Pyetja tjetër</button>
+    </div>
+    <div class="subnet-result" id="mini-subnet-feedback"></div>
+  </div>
+</div>
+
+<div class="modal" id="quiz-result-modal" onclick="closeQuizModal(event)">
+  <div class="modal-card">
+    <div class="modal-title">Raporti Final i Kuizit</div>
+    <div id="quiz-modal-summary"></div>
+    <div class="quiz-actions" style="margin-top:14px">
+      <button class="ghost-btn" onclick="closeQuizModal()">Mbyll</button>
+      <button class="ghost-btn" onclick="rotateQuizVersion(); closeQuizModal();">Ndërro Quizin</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== CHEAT SHEET ========== -->
+<div id="cheatsheet" class="section">
+  <div class="section-title"><span class="icon">⚡</span> Cheat Sheet — Porta, Protokolle, Formulat</div>
+
+  <div class="card">
+    <h2>🔌 Portet Kryesore</h2>
+    <table>
+      <tr class="port-row"><td>Port 80</td><td>HTTP</td><td>Web</td></tr>
+      <tr class="port-row"><td>Port 443</td><td>HTTPS</td><td>Web i sigurt</td></tr>
+      <tr class="port-row"><td>Port 25</td><td>SMTP</td><td>Dërgim emaili</td></tr>
+      <tr class="port-row"><td>Port 53</td><td>DNS</td><td>UDP dhe TCP</td></tr>
+      <tr class="port-row"><td>Port 21</td><td>FTP</td><td>File transfer</td></tr>
+      <tr class="port-row"><td>Port 22</td><td>SSH</td><td>Remote login</td></tr>
+      <tr class="port-row"><td>Port 110</td><td>POP3</td><td>Mail retrieval</td></tr>
+      <tr class="port-row"><td>Port 143</td><td>IMAP</td><td>Mail retrieval</td></tr>
+    </table>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h2>📐 Formulat Kryesore</h2>
+      <div class="formula">N² Problem: N(N-1)/2</div>
+      <div class="formula">RTT Non-persistent HTTP:<br>Response = 2·RTT + file_time</div>
+      <div class="formula">EstimatedRTT = (1-0.125)·EstRTT + 0.125·SampleRTT</div>
+      <div class="formula">DevRTT = (1-0.25)·DevRTT + 0.25·|SampleRTT - EstRTT|</div>
+      <div class="formula">TimeoutInterval = EstimatedRTT + 4·DevRTT</div>
+      <div class="formula">Digitizimi i zërit:<br>8 bits/sample × 8000 samples/sec = 64 Kbps</div>
+      <div class="formula">T-1 multiplexing: 24 zëra = 1.544 Mbps</div>
+    </div>
+    <div class="card">
+      <h2>📋 Protokollet — Cheat</h2>
+      <div class="def"><strong>HTTP</strong> — TCP, port 80, stateless, pull</div>
+      <div class="def"><strong>SMTP</strong> — TCP, port 25, ASCII 7-bit, push, persistent</div>
+      <div class="def"><strong>DNS</strong> — UDP+TCP, port 53, distributed DB</div>
+      <div class="def"><strong>FTP</strong> — TCP, ports 20+21</div>
+      <div class="def"><strong>IMAP</strong> — TCP, port 143, mail retrieval, folder</div>
+      <div class="def"><strong>DHCP</strong> — UDP, broadcast FFFFFFFFFFFF</div>
+      <div class="def"><strong>TCP</strong> — Reliable, ordered, flow+congestion ctrl</div>
+      <div class="def"><strong>UDP</strong> — Unreliable, fast, checksum vetëm</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🏷️ DNS Record Types — Memorizo!</h2>
+    <div class="grid-2">
+      <div>
+        <div class="def"><strong>Type A</strong>: hostname → IP address</div>
+        <div class="def"><strong>Type NS</strong>: domain → hostname i auth. server</div>
+      </div>
+      <div>
+        <div class="def"><strong>Type CNAME</strong>: alias → emri kanonik (real)</div>
+        <div class="def"><strong>Type MX</strong>: domain → emri i mail serverit</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🌐 Llojet e Rrjetave — Memorizo!</h2>
+    <div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:10px">
+      <span class="tag tag-blue">PAN — Bluetooth, Personal</span>
+      <span class="tag tag-green">LAN — Shtëpi, Zyrë</span>
+      <span class="tag tag-purple">MAN — Qytet</span>
+      <span class="tag tag-yellow">WAN — Vend, ISP</span>
+      <span class="tag tag-red">VPN — Lidhje virtuale mbi Internet</span>
+      <span class="tag tag-blue">CDN — Content Delivery Network</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>📡 Gjeneratat Mobile</h2>
+    <table>
+      <tr><th>Gjenerata</th><th>Teknologjia</th><th>Veçoria kryesore</th><th>Max Speed</th></tr>
+      <tr><td class="highlight">1G (1983)</td><td>AMPS</td><td>Analog, vetëm zë</td><td>—</td></tr>
+      <tr><td class="highlight">2G</td><td>GSM/CDMA</td><td>Dixhital, SMS</td><td>~144 Kbps</td></tr>
+      <tr><td class="highlight">3G</td><td>UMTS/CDMA2000</td><td>Circuit + Packet switching</td><td>~2 Mbps</td></tr>
+      <tr><td class="highlight">LTE</td><td>4G LTE</td><td>IP vetëm, souped-up 3G</td><td>300 Mbps</td></tr>
+      <tr><td class="highlight">4G</td><td>WiMax (802.16m)</td><td>IP packet switching vetëm</td><td>1 Gbps</td></tr>
+      <tr><td class="highlight">5G</td><td>NR FR1+FR2</td><td>eMBB, URLLC, mMTC</td><td>20 Gbps</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>🔄 HTTP Status Codes</h2>
+    <div style="display:flex; flex-wrap:wrap; gap:10px">
+      <span class="tag tag-green">200 OK</span>
+      <span class="tag tag-yellow">301 Moved Permanently</span>
+      <span class="tag tag-blue">304 Not Modified (cache)</span>
+      <span class="tag tag-red">400 Bad Request</span>
+      <span class="tag tag-red">404 Not Found</span>
+      <span class="tag tag-red">505 HTTP Version Not Supported</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>⚡ Gjërat Kritike për Kollokvium</h2>
+    <ul class="clean">
+      <li><span class="highlight">N² Problem</span> — Formula dhe zgjidhja me circuit switching</li>
+      <li><span class="highlight">HTTP stateless + Cookies</span> — 4 komponentet e cookies</li>
+      <li><span class="highlight">DNS Hierarchy</span> — Root → TLD → Authoritative → Local</li>
+      <li><span class="highlight">DNS Record Types</span> — A, NS, CNAME, MX</li>
+      <li><span class="highlight">Iterated vs Recursive DNS</span> — Best practice: Iterated</li>
+      <li><span class="highlight">TCP vs UDP</span> — Dallimet e plota</li>
+      <li><span class="highlight">4-tuple TCP</span> — Source IP, Source Port, Dest IP, Dest Port</li>
+      <li><span class="highlight">TCP Handshake</span> — SYN → SYNACK → ACK</li>
+      <li><span class="highlight">RTT Formula</span> — EstimatedRTT + 4×DevRTT</li>
+      <li><span class="highlight">GBN vs SR</span> — Dallimi i retransmission</li>
+      <li><span class="highlight">CIDR</span> — a.b.c.d/x notation</li>
+      <li><span class="highlight">DHCP 4 fazat</span> — Discover, Offer, Request, ACK</li>
+      <li><span class="highlight">NAT</span> — 1 IP publike, private space, translation table</li>
+      <li><span class="highlight">IPv6 vs IPv4</span> — 128-bit, pa checksum/fragmentation</li>
+      <li><span class="highlight">5G — eMBB, URLLC, mMTC</span> — Kërkesat dhe aplikimet</li>
+    </ul>
+  </div>
+</div>
+
+</div><!-- end container -->
+
+<footer>Made with love in Kosovo · <a class="footer-gh" href="https://github.com/T0MM4S" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.5-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82A7.59 7.59 0 0 1 8 3.8c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path></svg><span>github.com/T0MM4S</span></a></footer>
+
+<!-- TOOLTIP BOX -->
+<div class="tooltip-box" id="tooltip-box">
+  <div class="tip-title" id="tooltip-title">Detaje</div>
+  <div id="tooltip-content"></div>
+</div>
+
+<script>
+function showSection(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function toggleAcc(header) {
+  const body = header.nextElementSibling;
+  const isOpen = body.classList.contains('open');
+  header.classList.toggle('open', !isOpen);
+  body.classList.toggle('open', !isOpen);
+}
+
+const tooltipBox = document.getElementById('tooltip-box');
+const tooltipTitle = document.getElementById('tooltip-title');
+const tooltipContent = document.getElementById('tooltip-content');
+
+// Apply tooltips to key definitions after DOM load
+const tipData = [
+  {
+    keyword: 'Rrjet Komunikues',
+    title: 'Rrjet Komunikues — Detaje',
+    tip: `<b>Hardware:</b> Routers, switches, hubs, modems, multiplexers, servers.<br><br>
+<b>Software:</b> Protokollet dhe aplikacionet.<br><br>
+<b>Fasilitetet fizike:</b> Tela bakri (deri ~1 Gbps), Koaksiale, Fibra optike (deri 1.6 Tbps per fiber).<br><br>
+Paraqitet si "cloud" sepse është transparent ndaj përdoruesit.`
+  },
+  {
+    keyword: 'PAN',
+    title: 'Personal Area Network',
+    tip: `Mbulon rreth 10 metra.<br><br>
+<b>Bluetooth</b> — Standard kryesor PAN wireless.<br>
+<b>ZigBee</b> — Për IoT dhe sensor networks.<br>
+<b>USB</b> — PAN me tel.<br><br>
+Shembull: lidhja e telefonit me headphones, laptop me mouse.`
+  },
+  {
+    keyword: 'LAN',
+    title: 'Local Area Network',
+    tip: `Mbulon shtëpi ose ndërtesë (deri ~1 km).<br><br>
+<b>Teknologjitë:</b><br>
+• Ethernet (IEEE 802.3) — me tel, deri 400 Gbps<br>
+• Wi-Fi (IEEE 802.11) — wireless, deri ~9.6 Gbps (802.11ax)<br><br>
+<b>Enterprise network</b> = LAN në kompani me VLANs.`
+  },
+  {
+    keyword: 'MAN',
+    title: 'Metropolitan Area Network',
+    tip: `Mbulon qytet ose rajon (10–100 km).<br><br>
+<b>Shembull kryesor:</b> Cable TV network — MSO (Multiple System Operator) ofron TV + Internet mbi të njëjtin kabllo.<br><br>
+<b>Teknologjia:</b> HFC (Hybrid Fiber Coax) — fibra deri te "kabina" e lagjes, pastaj kabllo koaksiale deri te shtëpia.`
+  },
+  {
+    keyword: 'WAN',
+    title: 'Wide Area Network',
+    tip: `Mbulon vend ose kontinente.<br><br>
+<b>ISP Network</b> = shembull klasik i WAN.<br><br>
+<b>Komponenta tipike:</b><br>
+• Backbone routers (lidhur me fibra optike me shpejtësi të larta)<br>
+• POP (Point of Presence) — pika ku klientët lidhen me ISP<br>
+• Peering agreements midis ISP-ve<br><br>
+<b>VPN</b> = WAN virtual e ndërtuar mbi tunnels të enkriptuara mbi Internet.`
+  },
+  {
+    keyword: 'HTTP',
+    title: 'HTTP — Si funksionon saktësisht?',
+    tip: `<b>Hapat:</b><br>
+1. Klienti hap lidhje TCP (port 80)<br>
+2. Dërgon HTTP GET request<br>
+3. Serveri kthen HTTP response<br>
+4. Lidhja mbyllet (non-persistent) ose rri hapur (persistent)<br><br>
+<b>Stateless</b> = çdo request është i pavarur. Serveri NUK kujton klientin.<br><br>
+<b>HTTP/1.0</b> — Non-persistent<br>
+<b>HTTP/1.1</b> — Persistent default<br>
+<b>HTTP/2</b> — Multiplexed frames, server push<br>
+<b>HTTP/3</b> — Mbi UDP (QUIC protocol)`
+  },
+  {
+    keyword: 'SMTP',
+    title: 'SMTP — Procesi i plotë',
+    tip: `<b>Hapat e dërgimit:</b><br>
+1. Alice përdor UA (User Agent) për të shkruar email<br>
+2. UA dërgon tek serveri i Alice me SMTP<br>
+3. Serveri i Alice hap TCP me serverin e Bob (port 25)<br>
+4. SMTP handshake: HELO, MAIL FROM, RCPT TO, DATA<br>
+5. Serveri i Bob vendos emailin në mailbox-in e Bob<br>
+6. Bob lexon me UA (IMAP/HTTP)<br><br>
+<b>Formati i mesazhit:</b> ASCII 7-bit. Linja e fundit: CRLF.CRLF`
+  },
+  {
+    keyword: 'DNS',
+    title: 'DNS — Sistemi i Emrave të Domeneve',
+    tip: `<b>Hierarkia:</b><br>
+Root (13 logjikë) → TLD (.com, .edu, .al) → Authoritative → Local<br><br>
+<b>Caching:</b> Çdo server cache-on rezultatin sipas TTL.<br><br>
+<b>ICANN</b> menaxhon root dhe delegon TLD-të.<br><br>
+<b>Siguria:</b><br>
+• DDoS attacks mbi root servers (të pazbuluara deri tani)<br>
+• DNS Spoofing / Cache Poisoning<br>
+• DNSSEC — autentifikim i përgjigjeve DNS`
+  },
+  {
+    keyword: 'Socket',
+    title: 'Socket — API i Rrjetit',
+    tip: `Socket = porta ndërmjet aplikacionit dhe rrjetit.<br><br>
+<b>Llojet:</b><br>
+• <code>SOCK_STREAM</code> — TCP (i besueshëm)<br>
+• <code>SOCK_DGRAM</code> — UDP (jo i besueshëm)<br><br>
+<b>Krijimi:</b> <code>socket(AF_INET, SOCK_STREAM)</code><br>
+<b>Lidhja:</b> <code>connect(addr, port)</code><br>
+<b>Dërgimi:</b> <code>send(data)</code><br>
+<b>Marrja:</b> <code>recv(buffer)</code><br><br>
+Çdo lidhje TCP identifikohet nga 4-tuple unike.`
+  },
+  {
+    keyword: 'DASH',
+    title: 'DASH — Adaptive Streaming',
+    tip: `<b>Si funksionon:</b><br>
+1. Serveri ndan videon në chunks (2-10 sek secili)<br>
+2. Çdo chunk enkodohet me bitrate të ndryshme (p.sh. 300Kbps, 1Mbps, 5Mbps)<br>
+3. Klienti periodikisht mat bandwidth-in<br>
+4. Zgjedh chunk-un me bitrate maksimale të mbështetshme<br><br>
+<b>Manifest file:</b> JSON/XML me URLs për të gjitha chunks dhe bitrate-t.<br><br>
+<b>Shembull:</b> Netflix, YouTube — ndryshon cilësinë automatikisht sipas lidhjes.`
+  },
+  {
+    keyword: 'CDN',
+    title: 'CDN — Content Delivery Network',
+    tip: `<b>Problemi:</b> Shumë përdorues → 1 server → bottleneck.<br><br>
+<b>Zgjidhja CDN:</b> Kopje të shumta të content-it në serverë gjeografikisht të shpërndarë.<br><br>
+<b>Strategjia "Enter Deep":</b> Akamai — 240,000+ serverë në 120+ vende, deep në access networks.<br><br>
+<b>Strategjia "Bring Home":</b> Limelight — dhjetëra grupe të mëdha pranë access nets.<br><br>
+<b>DNS-based redirection:</b> DNS kthen IP-në e serverit CDN më afër klientit.`
+  },
+  {
+    keyword: 'TCP',
+    title: 'TCP — Transmission Control Protocol',
+    tip: `<b>Karakteristikat:</b><br>
+• Point-to-point: 1 dërgues, 1 marrës<br>
+• Reliable, in-order byte stream<br>
+• Full duplex (bi-directional)<br>
+• Cumulative ACKs<br>
+• Pipelining (congestion & flow controlled)<br>
+• 3-way handshake para dërgimit<br><br>
+<b>Header madhësia:</b> 20 bytes minimum<br><br>
+<b>NUK ofron:</b> Timing guarantees, minimum throughput, security (pa TLS)`
+  },
+  {
+    keyword: 'UDP',
+    title: 'UDP — User Datagram Protocol',
+    tip: `<b>Pse ekziston UDP nëse nuk është i besueshëm?</b><br><br>
+• Asnjë setup/handshaking → pa vonesë RTT para dërgimit<br>
+• Pa connection state → server mund të trajtojë më shumë klientë<br>
+• Header i vogël: vetëm 8 bytes (vs 20+ TCP)<br>
+• Pa congestion control → mund të dërgojë sa shpejt të dojë<br><br>
+<b>Përdorimet:</b> DNS, SNMP, DHCP, streaming, gaming, HTTP/3 (QUIC mbi UDP)`
+  },
+  {
+    keyword: 'NAT',
+    title: 'NAT — Network Address Translation',
+    tip: `<b>Procesi:</b><br>
+1. Host lokal (10.0.0.1:3345) dërgon packet<br>
+2. NAT router zëvendëson: src → (138.76.29.7:5001)<br>
+3. Shton hyrje në NAT table<br>
+4. Kur kthehet paketa → NAT table → drejtohet te (10.0.0.1:3345)<br><br>
+<b>Private IP ranges:</b><br>
+• 10.0.0.0/8<br>
+• 172.16.0.0/12<br>
+• 192.168.0.0/16<br><br>
+<b>NAT Traversal problem:</b> Si mund klienti të lidhet me server pas NAT? → Zgjidhje: STUN, TURN, UPnP`
+  },
+  {
+    keyword: 'DHCP',
+    title: 'DHCP — Dynamic Host Configuration',
+    tip: `<b>4 Fazat:</b><br>
+<b>1. DISCOVER</b> — Klienti broadcast-on (255.255.255.255) "ka DHCP server?"<br>
+<b>2. OFFER</b> — Serveri ofron IP, lease time, gateway, DNS<br>
+<b>3. REQUEST</b> — Klienti pranon ofertën (broadcast prapë)<br>
+<b>4. ACK</b> — Serveri konfirmon, klienti merr adresën<br><br>
+<b>Lease renewal:</b> Klienti rinovojë para skadimit (zakonisht pas 50% të lease time).`
+  },
+  {
+    keyword: 'IPv6',
+    title: 'IPv6 — Versioni i Ri i IP',
+    tip: `<b>Madhësia e adresës:</b> 128-bit (vs 32-bit IPv4)<br>
+<b>Shkrimi:</b> 8 grupe × 4 hex digits, p.sh. <code>2001:0db8:85a3::8a2e:0370:7334</code><br><br>
+<b>Çfarë mungon (ndaj IPv4):</b><br>
+• Asnjë checksum (routers procesojnë më shpejt)<br>
+• Asnjë fragmentation (hosts bëjnë path MTU discovery)<br>
+• Asnjë options (next-header mechanism)<br><br>
+<b>Adoptimi:</b> ~40% klientë Google (2023). Slow rollout — 25+ vjet!<br><br>
+<b>Tunneling:</b> IPv6 brenda IPv4 kur kalon nëpër rrjet IPv4 të vjetër.`
+  },
+  {
+    keyword: 'CIDR',
+    title: 'CIDR — Si llogaritet Subnet?',
+    tip: `<b>Notacioni:</b> a.b.c.d/x<br>
+x = numri i biteve prefix (subnet part)<br><br>
+<b>Shembull: 192.168.1.0/24</b><br>
+• Subnet mask: 255.255.255.0<br>
+• Adresa rrjeti: 192.168.1.0<br>
+• Broadcast: 192.168.1.255<br>
+• Hostë të mundshëm: 2^8 - 2 = 254<br><br>
+<b>2 adresa të rezervuara gjithmonë:</b><br>
+• All-zeros host part → adresa e rrjetit/subnet<br>
+• All-ones host part → broadcast address`
+  },
+  {
+    keyword: 'Go-Back-N',
+    title: 'Go-Back-N — Si funksionon?',
+    tip: `<b>Window N:</b> Dërgon deri N pako pa pritur ACK.<br><br>
+<b>Kur humbja ndodh (p.sh. pkt 2):</b><br>
+Timeout → retransmit pkt 2, 3, 4, 5... (të gjitha pas saj)<br>
+Marrësi hedh poshtë 3, 4, 5 (out-of-order)<br><br>
+<b>Cumulative ACK:</b> ACK(n) = "kam marrë gjithçka deri n"<br><br>
+<b>Avantazhi:</b> Marrësi i thjeshtë (asnjë buffer)<br>
+<b>Disavantazhi:</b> Shumë retransmisione kur ka humbje`
+  },
+  {
+    keyword: 'Selective Repeat',
+    title: 'Selective Repeat — Si ndryshon?',
+    tip: `<b>Ndryshimi kryesor nga GBN:</b><br>
+SR buferon pako jashtë rendit dhe ACK-on individualisht.<br><br>
+<b>Kur humbja ndodh (p.sh. pkt 2):</b><br>
+Timeout → retransmit VETËM pkt 2<br>
+Pkt 3, 4, 5 → buffer-ohen tek marrësi<br>
+Kur pkt 2 mbërrin → deliver të gjitha në rend<br><br>
+<b>Window size constraint:</b> window ≤ seq_space/2<br>
+Arsyeja: shmang konfuzionin midis paketave të reja dhe të vjetra`
+  },
+  {
+    keyword: 'Routing',
+    title: 'Routing vs Forwarding — Dallimi',
+    tip: `<b>Forwarding</b> = vendim lokal i router-it për çdo paketë.<br><br>
+<b>Routing</b> = llogaritja e rrugëve në shkallë rrjeti për tabelat e router-ëve.<br><br>
+Analogji: routing planifikon itinerarin; forwarding bën kthesën në kryqëzim.`
+  },
+  {
+    keyword: 'Flow Control',
+    title: 'Flow Control vs Congestion Control',
+    tip: `<b>Flow control</b> mbron marrësin (buffer i hostit).<br>
+<b>Congestion control</b> mbron rrjetin (linke/routerë) nga mbingarkesa.<br><br>
+Në TCP përdoren së bashku: rwnd + cwnd.`
+  }
+];
+
+function attachDefinitionTooltips() {
+  tipData.forEach(({ keyword, title, tip }) => {
+    document.querySelectorAll('.def').forEach(el => {
+      if (el.textContent.includes(keyword) && !el.hasAttribute('data-tip')) {
+        el.setAttribute('data-tip', tip);
+        el.setAttribute('data-tip-title', title);
+      }
+    });
+  });
+
+  document.querySelectorAll('.def[data-tip]').forEach(el => {
+    el.addEventListener('mouseenter', function(e) {
+      tooltipTitle.textContent = this.getAttribute('data-tip-title') || 'Detaje';
+      tooltipContent.innerHTML = this.getAttribute('data-tip');
+      tooltipBox.classList.add('visible');
+      positionTooltip(e);
+    });
+    el.addEventListener('mousemove', positionTooltip);
+    el.addEventListener('mouseleave', function() {
+      tooltipBox.classList.remove('visible');
+    });
+  });
+}
+
+function positionTooltip(e) {
+  const pad = 16;
+  const tw = 340;
+  const th = tooltipBox.offsetHeight || 120;
+  let x = e.clientX + pad;
+  let y = e.clientY + pad;
+  if (x + tw > window.innerWidth - pad) x = e.clientX - tw - pad;
+  if (y + th > window.innerHeight - pad) y = e.clientY - th - pad;
+  tooltipBox.style.left = x + 'px';
+  tooltipBox.style.top  = y + 'px';
+}
+
+// Quiz
+const quizState = {};
+let totalAnswered = 0;
+let totalCorrect = 0;
+let examModeActive = false;
+let examSecondsLeft = 15 * 60;
+let examInterval = null;
+let currentQuizVersion = 'A';
+
+const quizVersions = {
+  A: ['q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7', 'q8', 'q9', 'q10'],
+  B: ['q6', 'q7', 'q8', 'q9', 'q10', 'q11', 'q12', 'q13', 'q14', 'q15'],
+  C: ['q1', 'q3', 'q5', 'q7', 'q9', 'q11', 'q12', 'q13', 'q14', 'q15']
+};
+
+const quizExplain = {
+  q1: 'N(N-1)/2 numëron çiftet unike të lidhjeve direkte.',
+  q2: 'Cookies shtojnë state mbi HTTP që është stateless.',
+  q3: 'DNS përdor UDP/53 për shumicën e query-ve dhe TCP/53 kur kërkohet.',
+  q4: '4-tuple e bën çdo lidhje TCP të identifikueshme në mënyrë unike.',
+  q5: 'Iterative query ul ngarkesën tek Root dhe TLD.',
+  q6: 'Termi 4·DevRTT amortizon variacionet e rrjetit.',
+  q7: 'IPv6 thjeshton header-in duke hequr disa fusha të IPv4.',
+  q8: 'SMTP është protokoll push dhe përdor TCP port 25.',
+  q9: 'GBN retransmeton shumë, SR retransmeton vetëm paketën e humbur.',
+  q10: 'DHCP jep adresim + parametra të rrjetit për konfigurim të plotë.',
+  q11: 'HTTP/2 përdor multiplexing me frames për të reduktuar bllokimet.',
+  q12: 'UDP socket-i shpesh identifikohet nga destination port në marrës.',
+  q13: 'NAT kursen IPv4 publike dhe lejon ndarje për shumë pajisje.',
+  q14: 'Në rdt3.0 timeout sjell retransmetim për të rikuperuar humbjen.',
+  q15: 'eMBB, URLLC, mMTC përfaqësojnë profile të ndryshme trafiku në 5G.'
+};
+
+function checkAnswer(el, result, qId) {
+  if (quizState[qId]) return;
+  quizState[qId] = true;
+  totalAnswered++;
+
+  const q = document.getElementById(qId);
+  const msg = document.getElementById(qId + '-msg');
+  const opts = q.querySelectorAll('.quiz-opt');
+
+  opts.forEach(opt => {
+    opt.style.pointerEvents = 'none';
+    if (opt === el) {
+      opt.classList.add(result === 'correct' ? 'correct' : 'wrong');
+    }
+    if (opt.getAttribute('onclick').includes("'correct'")) {
+      opt.classList.add('correct');
+    }
+  });
+
+  if (result === 'correct') {
+    totalCorrect++;
+    msg.textContent = '✓ Saktë! ' + quizExplain[qId];
+    msg.className = 'quiz-check correct-msg';
+  } else {
+    msg.textContent = '✗ Gabim. ' + quizExplain[qId] + ' Shiko opsionin e gjelbër.';
+    msg.className = 'quiz-check wrong-msg';
+  }
+  msg.style.display = 'block';
+  updateScore();
+
+  if (getAnsweredInActiveVersion() === getActiveTotalQuestions()) {
+    showQuizSummary();
+  }
+}
+
+function getActiveQuestionIds() {
+  return quizVersions[currentQuizVersion] || quizVersions.A;
+}
+
+function getActiveTotalQuestions() {
+  return getActiveQuestionIds().length;
+}
+
+function getAnsweredInActiveVersion() {
+  return getActiveQuestionIds().filter(id => quizState[id]).length;
+}
+
+function getCorrectInActiveVersion() {
+  return getActiveQuestionIds().filter(id => {
+    const msg = document.getElementById(id + '-msg');
+    return msg && msg.classList.contains('correct-msg');
+  }).length;
+}
+
+function updateDashboard() {
+  const activeTotal = getActiveTotalQuestions();
+  const answered = getAnsweredInActiveVersion();
+  const correct = getCorrectInActiveVersion();
+  const pct = activeTotal ? Math.round((correct / activeTotal) * 100) : 0;
+  let level = 'Fillestar';
+  if (pct >= 85) level = 'Gati për provim';
+  else if (pct >= 70) level = 'Mirë';
+  else if (pct >= 50) level = 'Mesatar';
+
+  document.getElementById('dash-accuracy').textContent = pct + '%';
+  document.getElementById('dash-answered').textContent = String(answered);
+  document.getElementById('dash-unanswered').textContent = String(activeTotal - answered);
+  document.getElementById('dash-level').textContent = level;
+}
+
+function renumberVisibleQuestions() {
+  let n = 1;
+  document.querySelectorAll('.quiz-q').forEach(q => {
+    if (q.style.display === 'none') return;
+    const p = q.querySelector('p');
+    if (!p) return;
+    if (!p.dataset.baseText) {
+      p.dataset.baseText = p.textContent.replace(/^\d+\.\s*/, '');
+    }
+    p.textContent = `${n}. ${p.dataset.baseText}`;
+    n++;
+  });
+}
+
+function applyQuizVersion(version) {
+  currentQuizVersion = version;
+  const activeIds = new Set(getActiveQuestionIds());
+  document.querySelectorAll('.quiz-q').forEach(q => {
+    q.style.display = activeIds.has(q.id) ? 'block' : 'none';
+  });
+  renumberVisibleQuestions();
+  updateScore();
+}
+
+function rotateQuizVersion() {
+  const all = Object.keys(quizVersions);
+  const candidates = all.filter(v => v !== currentQuizVersion);
+  currentQuizVersion = candidates[Math.floor(Math.random() * candidates.length)];
+  resetQuiz();
+}
+
+function updateScore() {
+  const activeTotal = getActiveTotalQuestions();
+  const activeCorrect = getCorrectInActiveVersion();
+  document.getElementById('score-display').textContent = activeCorrect;
+  document.getElementById('total-display').textContent = activeTotal;
+  const pct = activeTotal > 0 ? (activeCorrect / activeTotal) * 100 : 0;
+  document.getElementById('score-bar').style.width = pct + '%';
+  updateDashboard();
+}
+
+function showQuizSummary() {
+  const panel = document.getElementById('quiz-feedback');
+  const activeTotal = getActiveTotalQuestions();
+  const answered = getAnsweredInActiveVersion();
+  const correct = getCorrectInActiveVersion();
+  const remaining = activeTotal - answered;
+  const pct = activeTotal ? Math.round((correct / activeTotal) * 100) : 0;
+  let level = 'Fillestar';
+  if (pct >= 85) level = 'Shumë mirë';
+  else if (pct >= 65) level = 'Mirë';
+  else if (pct >= 45) level = 'Mesatar';
+
+  panel.style.display = 'block';
+  panel.innerHTML = `<strong>Rezultati:</strong> ${correct}/${activeTotal} (${pct}%) · <strong>Niveli:</strong> ${level}<br>
+  <strong>Të përgjigjura:</strong> ${answered} · <strong>Të pambuluara:</strong> ${remaining}`;
+
+  openQuizModal();
+}
+
+function buildImprovementTips(wrongIds) {
+  if (!wrongIds.length) return ['Shumë mirë. Bëj një quiz tjetër për konsolidim.'];
+  const tips = [];
+  if (wrongIds.some(id => ['q2', 'q3', 'q5', 'q11'].includes(id))) {
+    tips.push('Përmirëso Application Layer: HTTP stateless/cookies, DNS iterative/recursive dhe HTTP/2.');
+  }
+  if (wrongIds.some(id => ['q4', 'q6', 'q8', 'q9', 'q14'].includes(id))) {
+    tips.push('Përmirëso Transport Layer: 4-tuple, RTT/Timeout, SMTP, GBN/SR dhe rdt3.0.');
+  }
+  if (wrongIds.some(id => ['q7', 'q10', 'q12', 'q13', 'q15'].includes(id))) {
+    tips.push('Përmirëso Network Layer: IPv6, DHCP, UDP demux, NAT dhe 5G skenarët.');
+  }
+  if (!tips.length) tips.push('Rishiko pyetjet e gabuara bashkë me shpjegimin poshtë përgjigjes së saktë.');
+  return tips;
+}
+
+function openQuizModal() {
+  const modal = document.getElementById('quiz-result-modal');
+  const summary = document.getElementById('quiz-modal-summary');
+  const activeIds = getActiveQuestionIds();
+  const answeredIds = activeIds.filter(id => quizState[id]);
+  const correctIds = activeIds.filter(id => {
+    const msg = document.getElementById(id + '-msg');
+    return msg && msg.classList.contains('correct-msg');
+  });
+  const wrongIds = answeredIds.filter(id => !correctIds.includes(id));
+  const pct = activeIds.length ? Math.round((correctIds.length / activeIds.length) * 100) : 0;
+
+  let readiness = 'Fillestar';
+  if (pct >= 85) readiness = 'Gati për provim';
+  else if (pct >= 70) readiness = 'Gati me pak rishikim';
+  else if (pct >= 50) readiness = 'Mesatar';
+
+  const tips = buildImprovementTips(wrongIds);
+  summary.innerHTML = `
+  <div class="dash-grid">
+    <div class="dash-item"><div class="dash-k">Niveli i gatishmërisë</div><div class="dash-v">${readiness}</div></div>
+    <div class="dash-item"><div class="dash-k">Pyetje të sakta</div><div class="dash-v">${correctIds.length}</div></div>
+    <div class="dash-item"><div class="dash-k">Gabime</div><div class="dash-v">${wrongIds.length}</div></div>
+    <div class="dash-item"><div class="dash-k">Saktësi</div><div class="dash-v">${pct}%</div></div>
+  </div>
+  <div style="margin-top:12px"><strong>Si të përmirësohen gabimet:</strong></div>
+  <ul class="list-lite">${tips.map(t => `<li>${t}</li>`).join('')}</ul>`;
+
+  modal.classList.add('open');
+}
+
+function closeQuizModal(evt) {
+  if (evt && evt.target && evt.target.id !== 'quiz-result-modal') return;
+  document.getElementById('quiz-result-modal').classList.remove('open');
+}
+
+function formatExamTime(sec) {
+  const m = String(Math.floor(sec / 60)).padStart(2, '0');
+  const s = String(sec % 60).padStart(2, '0');
+  return `${m}:${s}`;
+}
+
+function updateExamUI() {
+  document.getElementById('exam-timer').textContent = formatExamTime(examSecondsLeft);
+  document.getElementById('exam-mode-label').textContent = examModeActive ? 'Exam (Active)' : 'Normal';
+}
+
+function stopExamMode(triggerSummary) {
+  if (examInterval) {
+    clearInterval(examInterval);
+    examInterval = null;
+  }
+  examModeActive = false;
+  updateExamUI();
+  if (triggerSummary) {
+    showQuizSummary();
+  }
+}
+
+function toggleExamMode() {
+  if (examModeActive) {
+    stopExamMode(false);
+    return;
+  }
+
+  examModeActive = true;
+  examSecondsLeft = 15 * 60;
+  updateExamUI();
+  examInterval = setInterval(() => {
+    examSecondsLeft = Math.max(0, examSecondsLeft - 1);
+    updateExamUI();
+    if (examSecondsLeft === 0) {
+      stopExamMode(true);
+    }
+  }, 1000);
+}
+
+function shuffleQuiz() {
+  const quizSection = document.getElementById('quiz');
+  const questions = Array.from(quizSection.querySelectorAll('.quiz-q')).filter(q => q.style.display !== 'none');
+  const shuffled = questions.sort(() => Math.random() - 0.5);
+  shuffled.forEach(q => quizSection.appendChild(q));
+  renumberVisibleQuestions();
+}
+
+function resetQuiz() {
+  stopExamMode(false);
+  examSecondsLeft = 15 * 60;
+  updateExamUI();
+  Object.keys(quizState).forEach(k => delete quizState[k]);
+  totalAnswered = 0;
+  totalCorrect = 0;
+  document.querySelectorAll('.quiz-opt').forEach(opt => {
+    opt.classList.remove('correct', 'wrong');
+    opt.style.pointerEvents = '';
+  });
+  document.querySelectorAll('.quiz-check').forEach(c => { c.style.display = 'none'; c.className = 'quiz-check'; });
+  document.getElementById('quiz-feedback').style.display = 'none';
+  closeQuizModal();
+  applyQuizVersion(currentQuizVersion);
+}
+
+function parseIp(ip) {
+  const parts = ip.trim().split('.').map(Number);
+  if (parts.length !== 4 || parts.some(p => Number.isNaN(p) || p < 0 || p > 255)) return null;
+  return parts;
+}
+
+function ipPartsToInt(parts) {
+  return (((parts[0] << 24) >>> 0) | (parts[1] << 16) | (parts[2] << 8) | parts[3]) >>> 0;
+}
+
+function intToIp(num) {
+  return [
+    (num >>> 24) & 255,
+    (num >>> 16) & 255,
+    (num >>> 8) & 255,
+    num & 255
+  ].join('.');
+}
+
+function prefixMask(prefix) {
+  if (prefix === 0) return 0;
+  return (0xffffffff << (32 - prefix)) >>> 0;
+}
+
+function toBinaryOctets(ip) {
+  const parsed = parseIp(ip);
+  if (!parsed) return null;
+  return parsed.map(o => o.toString(2).padStart(8, '0')).join('.');
+}
+
+const subnetAnimationExample = {
+  ip: '192.168.45.173',
+  prefix: 27
+};
+let subnetAnimSteps = [];
+let subnetAnimIndex = 0;
+let subnetAnimTimer = null;
+
+function buildSubnetSteps(ip, prefix) {
+  const ipParts = parseIp(ip);
+  const ipInt = ipPartsToInt(ipParts);
+  const mask = prefixMask(prefix);
+  const net = ipInt & mask;
+  const broad = (net | (~mask >>> 0)) >>> 0;
+  const first = prefix >= 31 ? net : net + 1;
+  const last = prefix >= 31 ? broad : broad - 1;
+  const hosts = prefix === 32 ? 1 : prefix === 31 ? 2 : Math.pow(2, 32 - prefix) - 2;
+
+  return [
+    {
+      t: 'Hapi 1 — IP dhe Prefix',
+      c: `<span class="mono">IP = ${ip}/${prefix}</span><br>Prefix tregon sa bitë janë pjesa e rrjetit.`
+    },
+    {
+      t: 'Hapi 2 — Maska',
+      c: `<span class="mono">Mask = ${intToIp(mask)}</span><br><span class="mono">${toBinaryOctets(intToIp(mask))}</span>`
+    },
+    {
+      t: 'Hapi 3 — IP në binar',
+      c: `<span class="mono">${toBinaryOctets(ip)}</span><br>Mbaj bitët e rrjetit, zerro bitët e hostit.`
+    },
+    {
+      t: 'Hapi 4 — Network Address',
+      c: `<span class="mono">Network = ${intToIp(net)}</span> (IP AND Mask)`
+    },
+    {
+      t: 'Hapi 5 — Broadcast',
+      c: `<span class="mono">Broadcast = ${intToIp(broad)}</span><br>Bitët e hostit bëhen 1.`
+    },
+    {
+      t: 'Hapi 6 — Host Range',
+      c: `<span class="mono">First = ${intToIp(first)}</span><br><span class="mono">Last = ${intToIp(last)}</span><br>Hosts të përdorshëm: <span class="mono">${hosts}</span>`
+    }
+  ];
+}
+
+function renderSubnetStep() {
+  const step = subnetAnimSteps[subnetAnimIndex];
+  document.getElementById('subnet-step-title').textContent = step.t;
+  document.getElementById('subnet-step-content').innerHTML = step.c;
+}
+
+function playSubnetAnimation() {
+  if (subnetAnimTimer) return;
+  subnetAnimTimer = setInterval(() => {
+    if (subnetAnimIndex < subnetAnimSteps.length - 1) {
+      subnetAnimIndex++;
+      renderSubnetStep();
+    } else {
+      clearInterval(subnetAnimTimer);
+      subnetAnimTimer = null;
+    }
+  }, 1800);
+}
+
+function nextSubnetStep() {
+  if (subnetAnimIndex < subnetAnimSteps.length - 1) {
+    subnetAnimIndex++;
+    renderSubnetStep();
+  }
+}
+
+function resetSubnetAnimation() {
+  if (subnetAnimTimer) {
+    clearInterval(subnetAnimTimer);
+    subnetAnimTimer = null;
+  }
+  subnetAnimIndex = 0;
+  renderSubnetStep();
+}
+
+let subnetPractice = null;
+
+function buildSubnetCase(ip, prefix) {
+  const ipParts = parseIp(ip);
+  const ipInt = ipPartsToInt(ipParts);
+  const mask = prefixMask(prefix);
+  const network = ipInt & mask;
+  const broadcast = (network | (~mask >>> 0)) >>> 0;
+  const hosts = prefix === 32 ? 1 : prefix === 31 ? 2 : Math.pow(2, 32 - prefix) - 2;
+
+  return {
+    target: `${ip}/${prefix}`,
+    network: intToIp(network),
+    broadcast: intToIp(broadcast),
+    hosts: String(hosts)
+  };
+}
+
+function generateSubnetPractice() {
+  const prefix = 16 + Math.floor(Math.random() * 15);
+  const ip = [
+    10 + Math.floor(Math.random() * 200),
+    Math.floor(Math.random() * 256),
+    Math.floor(Math.random() * 256),
+    Math.floor(Math.random() * 256)
+  ].join('.');
+
+  subnetPractice = buildSubnetCase(ip, prefix);
+  document.getElementById('practice-target').textContent = subnetPractice.target;
+  document.getElementById('practice-network').value = '';
+  document.getElementById('practice-broadcast').value = '';
+  document.getElementById('practice-hosts').value = '';
+  const res = document.getElementById('practice-result');
+  res.style.display = 'none';
+}
+
+function checkSubnetPractice() {
+  if (!subnetPractice) return;
+  const net = document.getElementById('practice-network').value.trim();
+  const brd = document.getElementById('practice-broadcast').value.trim();
+  const hst = document.getElementById('practice-hosts').value.trim();
+
+  const netOk = net === subnetPractice.network;
+  const brdOk = brd === subnetPractice.broadcast;
+  const hstOk = hst === subnetPractice.hosts;
+
+  const result = document.getElementById('practice-result');
+  result.style.display = 'block';
+  result.innerHTML = `
+  Network: ${netOk ? '✓' : '✗'} (Saktë: <span class="mono">${subnetPractice.network}</span>)<br>
+  Broadcast: ${brdOk ? '✓' : '✗'} (Saktë: <span class="mono">${subnetPractice.broadcast}</span>)<br>
+  Hosts: ${hstOk ? '✓' : '✗'} (Saktë: <span class="mono">${subnetPractice.hosts}</span>)`;
+}
+
+function convertIpToBinary() {
+  const input = document.getElementById('dec-ip').value.trim();
+  const out = document.getElementById('ip-binary-output');
+  const bin = toBinaryOctets(input);
+  out.textContent = bin || 'Format i pavlefshëm. Përdor p.sh. 172.16.5.9';
+}
+
+function convertBinaryToIp() {
+  const input = document.getElementById('bin-ip').value.trim();
+  const out = document.getElementById('ip-decimal-output');
+  const parts = input.split('.');
+  if (parts.length !== 4 || parts.some(p => !/^[01]{8}$/.test(p))) {
+    out.textContent = 'Format i pavlefshëm. Duhet 4 oktete nga 8 bit.';
+    return;
+  }
+  const dec = parts.map(p => parseInt(p, 2)).join('.');
+  out.textContent = dec;
+}
+
+function movePacket(packetEl, toRight, label) {
+  packetEl.style.opacity = '1';
+  packetEl.textContent = label;
+  packetEl.style.left = toRight ? '14%' : '78%';
+  packetEl.style.transform = `translateX(${toRight ? 620 : -620}%)`;
+}
+
+function resetLanePacket(packetEl) {
+  packetEl.style.transition = 'none';
+  packetEl.style.left = '14%';
+  packetEl.style.transform = 'translateX(0)';
+  packetEl.style.opacity = '1';
+  void packetEl.offsetWidth;
+  packetEl.style.transition = 'transform 0.9s ease, opacity 0.3s ease';
+}
+
+function runUdpDemo(simulateLoss) {
+  const packet = document.getElementById('udp-packet');
+  const log = document.getElementById('udp-log');
+  const explain = document.getElementById('udp-explain');
+  resetLanePacket(packet);
+  log.textContent = 'Sender dërgon UDP datagram...';
+  explain.textContent = 'UDP është connectionless: paketa dërgohet pa pritur konfirmim.';
+
+  setTimeout(() => {
+    movePacket(packet, true, 'UDP DATA');
+  }, 30);
+
+  setTimeout(() => {
+    if (simulateLoss) {
+      packet.style.opacity = '0.2';
+      log.textContent = 'Datagrama humbi në rrjet. Nuk ka ACK automatik në UDP.';
+      explain.textContent = 'Në humbje UDP, transporti nuk retransmeton vetë. Nëse aplikacioni ka nevojë reliability, duhet të implementojë retry/ACK në nivel aplikacioni.';
+    } else {
+      log.textContent = 'Datagrama u dorëzua te receiver. Procesi mbaron pa ACK.';
+      explain.textContent = 'Paketa mbërriti me sukses, por prapë nuk ka mekanizëm konfirmimi si TCP.';
+    }
+  }, 980);
+}
+
+const packetCheckpointState = { udp: 0, tcp: 0 };
+let checksumWords = [0x6666, 0xBBBB, 0xB5D0];
+let checksumStepIndex = 0;
+let checksumTimer = null;
+let checksumQuizState = { total: 0, correct: 0, words: [0x1111, 0x2222, 0x3333], answer: 0 };
+
+function toHex16(value) {
+  return `0x${(value & 0xffff).toString(16).toUpperCase().padStart(4, '0')}`;
+}
+
+function toHexN(value, width) {
+  return `0x${Math.max(0, value).toString(16).toUpperCase().padStart(width, '0')}`;
+}
+
+function toBin16(value) {
+  return (value & 0xffff).toString(2).padStart(16, '0');
+}
+
+function checksumCompute(words) {
+  const s12 = checksumAddWithCarry(words[0], words[1]);
+  const s123 = checksumAddWithCarry(s12.wrapped, words[2]);
+  const checksum = (~s123.wrapped) & 0xffff;
+  return { s12, s123, checksum };
+}
+
+function formatWordLine(label, value) {
+  return `${label}: ${toBin16(value)} (${toHex16(value)})`;
+}
+
+function renderChecksumBoard() {
+  document.getElementById('checksum-word-1').textContent = formatWordLine('W1', checksumWords[0]);
+  document.getElementById('checksum-word-2').textContent = formatWordLine('W2', checksumWords[1]);
+  document.getElementById('checksum-word-3').textContent = formatWordLine('W3', checksumWords[2]);
+}
+
+function parseHexWordInput(raw) {
+  const clean = raw.trim().replace(/^0x/i, '');
+  if (!/^[0-9a-fA-F]{1,4}$/.test(clean)) return null;
+  return parseInt(clean, 16) & 0xffff;
+}
+
+function applyChecksumInputs() {
+  const values = [
+    parseHexWordInput(document.getElementById('checksum-in-1').value),
+    parseHexWordInput(document.getElementById('checksum-in-2').value),
+    parseHexWordInput(document.getElementById('checksum-in-3').value)
+  ];
+
+  if (values.some(v => v === null)) {
+    const log = document.getElementById('checksum-log');
+    const explain = document.getElementById('checksum-explain');
+    log.textContent = 'Input i pavlefshëm. Përdor HEX 1-4 shifra për çdo fjalë (p.sh. 1A2F).';
+    explain.textContent = 'Lejohen formatet: 1A2F ose 0x1A2F. Çdo vlerë duhet të jetë 16-bit.';
+    return;
+  }
+
+  checksumWords = values;
+  renderChecksumBoard();
+  resetChecksumCheckpoint();
+}
+
+function randomizeChecksumInputs() {
+  const rnd = () => Math.floor(Math.random() * 0x10000);
+  const a = rnd();
+  const b = rnd();
+  const c = rnd();
+  document.getElementById('checksum-in-1').value = a.toString(16).toUpperCase().padStart(4, '0');
+  document.getElementById('checksum-in-2').value = b.toString(16).toUpperCase().padStart(4, '0');
+  document.getElementById('checksum-in-3').value = c.toString(16).toUpperCase().padStart(4, '0');
+  applyChecksumInputs();
+}
+
+function resetChecksumHighlights() {
+  [1, 2, 3].forEach(i => {
+    document.getElementById(`checksum-word-${i}`).classList.remove('active');
+  });
+}
+
+function checksumAddWithCarry(a, b) {
+  const raw = a + b;
+  const low = raw & 0xffff;
+  const carry = raw > 0xffff ? 1 : 0;
+  const wrapped = (low + carry) & 0xffff;
+  return { raw, low, carry, wrapped };
+}
+
+function renderChecksumStep() {
+  const chip = document.getElementById('checksum-step-chip');
+  const log = document.getElementById('checksum-log');
+  const explain = document.getElementById('checksum-explain');
+  const eq = document.getElementById('checksum-equation');
+  const finalWord = document.getElementById('checksum-word-final');
+  const [w1, w2, w3] = checksumWords;
+  const { s12, s123, checksum } = checksumCompute(checksumWords);
+
+  resetChecksumHighlights();
+  finalWord.textContent = 'Checksum: ?';
+  chip.textContent = `Checksum Checkpoint: ${checksumStepIndex}/6`;
+
+  if (checksumStepIndex === 0) {
+    log.textContent = 'Checkpoint 0: Nisja e demo-s, 3 fjalë 16-bit gati për llogaritje.';
+    explain.textContent = 'Në TCP/UDP checksum, data ndahet në fjalë 16-bit dhe mblidhet me one\'s complement addition.';
+    eq.textContent = `${toHex16(w1)} + ${toHex16(w2)} + ${toHex16(w3)} = ?`;
+    return;
+  }
+
+  if (checksumStepIndex === 1) {
+    document.getElementById('checksum-word-1').classList.add('active');
+    document.getElementById('checksum-word-2').classList.add('active');
+    log.textContent = 'Checkpoint 1: Mbledhja e W1 + W2.';
+    explain.textContent = 'Fillimisht bëjmë mbledhjen binare 16-bit të dy fjalëve të para.';
+    eq.textContent = `${toHex16(w1)} + ${toHex16(w2)} = ${toHexN(s12.raw, 5)} (raw 17-bit)`;
+    return;
+  }
+
+  if (checksumStepIndex === 2) {
+    document.getElementById('checksum-word-1').classList.add('active');
+    document.getElementById('checksum-word-2').classList.add('active');
+    log.textContent = 'Checkpoint 2: Carry wrap-around pas W1+W2.';
+    explain.textContent = 'Biti i 17-të (carry) shtohet te 16 bitët e poshtëm.';
+    eq.textContent = `${toHex16(s12.low)} + carry(${s12.carry}) = ${toHex16(s12.wrapped)} [${toBin16(s12.wrapped)}]`;
+    return;
+  }
+
+  if (checksumStepIndex === 3) {
+    document.getElementById('checksum-word-3').classList.add('active');
+    log.textContent = 'Checkpoint 3: Shtohet W3 te shuma paraprake.';
+    explain.textContent = 'Tani vazhdojmë me fjalën e tretë dhe përsëri mbajmë logjikën 16-bit.';
+    eq.textContent = `${toHex16(s12.wrapped)} + ${toHex16(w3)} = ${toHexN(s123.raw, 5)} (raw 17-bit)`;
+    return;
+  }
+
+  if (checksumStepIndex === 4) {
+    document.getElementById('checksum-word-3').classList.add('active');
+    log.textContent = 'Checkpoint 4: Carry wrap-around pas shtimit të W3.';
+    explain.textContent = 'Përsëri, nëse ka carry, e rikthejmë në fund të shumës.';
+    eq.textContent = `${toHex16(s123.low)} + carry(${s123.carry}) = ${toHex16(s123.wrapped)} [${toBin16(s123.wrapped)}]`;
+    return;
+  }
+
+  if (checksumStepIndex === 5) {
+    log.textContent = 'Checkpoint 5: One\'s complement i shumës finale.';
+    explain.textContent = 'Bëjmë invertimin bit-për-bit të shumës 16-bit për të marrë checksum.';
+    eq.textContent = `~${toHex16(s123.wrapped)} = ${toHex16(checksum)} [${toBin16(checksum)}]`;
+    return;
+  }
+
+  finalWord.textContent = `Checksum: ${toBin16(checksum)} (${toHex16(checksum)})`;
+  finalWord.classList.add('active');
+  log.textContent = 'Checkpoint 6: Checksum final gati për vendosje në header.';
+  explain.textContent = 'Në receiver bëhet e njëjta mbledhje me checksum-in; rezultati i pritur është all-ones nëse s\'ka gabime.';
+  eq.textContent = `Final: ${toHex16(checksum)} = ${toBin16(checksum)}`;
+}
+
+function nextChecksumCheckpoint() {
+  checksumStepIndex = (checksumStepIndex + 1) % 7;
+  renderChecksumStep();
+}
+
+function resetChecksumCheckpoint() {
+  if (checksumTimer) {
+    clearInterval(checksumTimer);
+    checksumTimer = null;
+  }
+  checksumStepIndex = 0;
+  renderChecksumStep();
+}
+
+function playChecksumDemo() {
+  if (checksumTimer) return;
+  checksumTimer = setInterval(() => {
+    if (checksumStepIndex < 6) {
+      checksumStepIndex += 1;
+      renderChecksumStep();
+    } else {
+      clearInterval(checksumTimer);
+      checksumTimer = null;
+    }
+  }, 1400);
+}
+
+function randomChecksumQuizWords() {
+  return [
+    Math.floor(Math.random() * 0x10000),
+    Math.floor(Math.random() * 0x10000),
+    Math.floor(Math.random() * 0x10000)
+  ];
+}
+
+function updateChecksumQuizScore() {
+  const { total, correct } = checksumQuizState;
+  const pct = total ? Math.round((correct / total) * 100) : 0;
+  document.getElementById('checksum-quiz-score').textContent = `Pikë: ${correct}/${total} (${pct}%)`;
+}
+
+function generateChecksumQuizRound() {
+  const words = randomChecksumQuizWords();
+  const computed = checksumCompute(words);
+  checksumQuizState.words = words;
+  checksumQuizState.answer = computed.checksum;
+  document.getElementById('checksum-quiz-question').textContent =
+    `Llogarit checksum për: W1=${toHex16(words[0])}, W2=${toHex16(words[1])}, W3=${toHex16(words[2])}`;
+  document.getElementById('checksum-quiz-answer').value = '';
+  document.getElementById('checksum-quiz-feedback').textContent = 'Shkruaj përgjigjen dhe kliko Kontrollo.';
+}
+
+function submitChecksumQuizAnswer() {
+  const raw = document.getElementById('checksum-quiz-answer').value;
+  const parsed = parseHexWordInput(raw);
+  const feedback = document.getElementById('checksum-quiz-feedback');
+
+  if (parsed === null) {
+    feedback.textContent = 'Format i pavlefshëm. Përdor 4 shifra HEX, p.sh. 2AF1.';
+    return;
+  }
+
+  checksumQuizState.total += 1;
+  if (parsed === checksumQuizState.answer) {
+    checksumQuizState.correct += 1;
+    feedback.textContent = `✓ Saktë! Checksum ishte ${toHex16(checksumQuizState.answer)}.`;
+  } else {
+    feedback.textContent = `✗ Jo tamam. Përgjigjja e saktë: ${toHex16(checksumQuizState.answer)}.`;
+  }
+  updateChecksumQuizScore();
+}
+
+function resetChecksumQuiz() {
+  checksumQuizState = { total: 0, correct: 0, words: [0x1111, 0x2222, 0x3333], answer: 0 };
+  updateChecksumQuizScore();
+  generateChecksumQuizRound();
+}
+
+function renderPacketCheckpoint(kind) {
+  const isUdp = kind === 'udp';
+  const packet = document.getElementById(isUdp ? 'udp-packet' : 'tcp-packet');
+  const log = document.getElementById(isUdp ? 'udp-log' : 'tcp-log');
+  const explain = document.getElementById(isUdp ? 'udp-explain' : 'tcp-explain');
+  const chip = document.getElementById(isUdp ? 'udp-step-chip' : 'tcp-step-chip');
+
+  const steps = isUdp
+    ? [
+        { label: 'UDP DATA', toRight: true, log: 'Checkpoint 1: Sender përgatit UDP datagram.', exp: 'Header i vogël, pa setup lidhjeje.' },
+        { label: 'UDP DATA', toRight: true, log: 'Checkpoint 2: Datagram lëviz në rrjet.', exp: 'Nuk ka ACK/flow control në transport.' },
+        { label: 'UDP DATA', toRight: true, log: 'Checkpoint 3: Receiver e merr (pa ACK).', exp: 'Delivery mund të ndodhë, por pa konfirmim nga protokolli.' },
+        { label: 'LOSS', toRight: true, log: 'Checkpoint 4: Skenar alternativ: datagram humbet, app vendos retry.', exp: 'Në humbje, UDP nuk retransmeton automatikisht.' }
+      ]
+    : [
+        { label: 'SYN', toRight: true, log: 'Checkpoint 1: Client -> Server SYN', exp: 'Nis establishment i lidhjes.' },
+        { label: 'SYN-ACK', toRight: false, log: 'Checkpoint 2: Server -> Client SYN-ACK', exp: 'Server pranon dhe sinkronizon seq.' },
+        { label: 'ACK', toRight: true, log: 'Checkpoint 3: Client -> Server ACK', exp: 'Lidhja u krijua me sukses (3-way handshake).' },
+        { label: 'DATA seq=10', toRight: true, log: 'Checkpoint 4: DATA dërgohet', exp: 'Data ka sequence number për renditje/rikuperim.' },
+        { label: 'ACK=11', toRight: false, log: 'Checkpoint 5: ACK kthehet te klienti', exp: 'ACK konfirmon marrjen dhe rrit reliability.' }
+      ];
+
+  const idx = packetCheckpointState[kind];
+  const step = steps[idx];
+  chip.textContent = `${isUdp ? 'UDP' : 'TCP'} Checkpoint: ${idx + 1}/${steps.length}`;
+  resetLanePacket(packet);
+  setTimeout(() => movePacket(packet, step.toRight, step.label), 20);
+  if (step.label === 'LOSS') {
+    setTimeout(() => { packet.style.opacity = '0.2'; }, 700);
+  }
+  log.textContent = step.log;
+  explain.textContent = step.exp;
+}
+
+function nextPacketCheckpoint(kind) {
+  const max = kind === 'udp' ? 4 : 5;
+  packetCheckpointState[kind] = (packetCheckpointState[kind] + 1) % max;
+  renderPacketCheckpoint(kind);
+}
+
+function resetPacketCheckpoint(kind) {
+  packetCheckpointState[kind] = 0;
+  renderPacketCheckpoint(kind);
+}
+
+async function runTcpDemo() {
+  const packet = document.getElementById('tcp-packet');
+  const log = document.getElementById('tcp-log');
+  const explain = document.getElementById('tcp-explain');
+  resetLanePacket(packet);
+
+  const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+  log.textContent = 'Hapi 1: Client -> Server SYN';
+  explain.textContent = 'TCP fillon me handshake për të garantuar gjendje të sinkronizuar.';
+  movePacket(packet, true, 'SYN');
+  await wait(980);
+
+  resetLanePacket(packet);
+  log.textContent = 'Hapi 2: Server -> Client SYN-ACK';
+  movePacket(packet, false, 'SYN-ACK');
+  await wait(980);
+
+  resetLanePacket(packet);
+  log.textContent = 'Hapi 3: Client -> Server ACK';
+  movePacket(packet, true, 'ACK');
+  await wait(980);
+
+  resetLanePacket(packet);
+  log.textContent = 'Hapi 4: Client -> Server DATA(seq=100)';
+  explain.textContent = 'Sequence number lejon rindërtim rendi dhe detektim humbjeje.';
+  movePacket(packet, true, 'DATA seq=100');
+  await wait(980);
+
+  resetLanePacket(packet);
+  log.textContent = 'Hapi 5: Server -> Client ACK(101)';
+  movePacket(packet, false, 'ACK=101');
+  await wait(980);
+
+  log.textContent = 'TCP completed: handshake + data + ACK token flow i suksesshëm.';
+  explain.textContent = 'Ky flow tregon pse TCP është reliable: setup + ACK + kontroll i rendit.';
+}
+
+async function runTcpRetransmitDemo() {
+  const packet = document.getElementById('tcp-packet');
+  const log = document.getElementById('tcp-log');
+  const explain = document.getElementById('tcp-explain');
+  const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+  resetLanePacket(packet);
+
+  log.textContent = 'Hapi 1: DATA(seq=500) humbet në rrjet.';
+  explain.textContent = 'Kur segmenti humbet, marrësi pret seq e munguar.';
+  movePacket(packet, true, 'DATA seq=500');
+  await wait(900);
+  packet.style.opacity = '0.2';
+
+  resetLanePacket(packet);
+  log.textContent = 'Hapi 2: Server dërgon Duplicate ACK #1 (ACK=500).';
+  movePacket(packet, false, 'DupACK 500');
+  await wait(900);
+
+  resetLanePacket(packet);
+  log.textContent = 'Hapi 3: Server dërgon Duplicate ACK #2.';
+  movePacket(packet, false, 'DupACK 500');
+  await wait(900);
+
+  resetLanePacket(packet);
+  log.textContent = 'Hapi 4: Server dërgon Duplicate ACK #3 -> Fast Retransmit trigger.';
+  explain.textContent = 'Tre duplicate ACK i tregojnë dërguesit se segmenti mungon.';
+  movePacket(packet, false, 'DupACK 500');
+  await wait(900);
+
+  resetLanePacket(packet);
+  log.textContent = 'Hapi 5: Client retransmeton menjëherë DATA(seq=500).';
+  movePacket(packet, true, 'RETX seq=500');
+  await wait(900);
+
+  resetLanePacket(packet);
+  log.textContent = 'Hapi 6: Server kthen ACK=501. Rrjedha rikuperohet pa timeout të gjatë.';
+  explain.textContent = 'Fast retransmit shpejton rikuperimin pa pritur timeout të plotë.';
+  movePacket(packet, false, 'ACK=501');
+}
+
+function countOnes(num) {
+  let n = num >>> 0;
+  let c = 0;
+  while (n) {
+    c += n & 1;
+    n >>>= 1;
+  }
+  return c;
+}
+
+function maskToPrefix(maskStr) {
+  const trimmed = maskStr.trim();
+  if (trimmed.startsWith('/')) {
+    const p = Number(trimmed.slice(1));
+    if (!Number.isInteger(p) || p < 0 || p > 32) return null;
+    return p;
+  }
+  const parts = parseIp(trimmed);
+  if (!parts) return null;
+  const maskInt = ipPartsToInt(parts);
+  const inv = (~maskInt) >>> 0;
+  if ((inv & (inv + 1)) !== 0) return null;
+  return countOnes(maskInt);
+}
+
+function classBitsForIp(ip) {
+  const first = parseIp(ip)?.[0];
+  if (first >= 1 && first <= 126) return 8;
+  if (first >= 128 && first <= 191) return 16;
+  if (first >= 192 && first <= 223) return 24;
+  return null;
+}
+
+function analyzeAddressInSubnet(ip, maskOrPrefix) {
+  const prefix = maskToPrefix(maskOrPrefix);
+  const classBits = classBitsForIp(ip);
+  if (prefix === null || classBits === null || prefix < classBits) return null;
+
+  const ipInt = ipPartsToInt(parseIp(ip));
+  const mask = prefixMask(prefix);
+  const network = ipInt & mask;
+  const broadcast = (network | (~mask >>> 0)) >>> 0;
+  const networkBits = classBits;
+  const subnetBits = prefix - classBits;
+  const hostBits = 32 - prefix;
+  const hostsPerSubnet = hostBits <= 1 ? Math.pow(2, hostBits) : Math.pow(2, hostBits) - 2;
+  const subnets = Math.pow(2, subnetBits);
+  const firstHost = hostBits <= 1 ? network : network + 1;
+  const lastHost = hostBits <= 1 ? broadcast : broadcast - 1;
+
+  return {
+    prefix,
+    networkBits,
+    subnetBits,
+    hostBits,
+    hostsPerSubnet,
+    subnets,
+    subnetNumber: intToIp(network),
+    broadcast: intToIp(broadcast),
+    range: `${intToIp(firstHost)} - ${intToIp(lastHost)}`
+  };
+}
+
+function buildPS4Set() {
+  const reqs = [
+    { net: '10.0.0.0', subnets: 50, hosts: 200 },
+    { net: '172.32.0.0', subnets: 125, hosts: 125 },
+    { net: '192.168.44.0', subnets: 15, hosts: 6 },
+    { net: '10.0.0.0', subnets: 300, hosts: 500 },
+    { net: '172.32.0.0', subnets: 500, hosts: 15 },
+    { net: '172.16.0.0', subnets: 2000, hosts: 2 }
+  ];
+
+  return reqs.map((r, idx) => {
+    const classBits = classBitsForIp(r.net);
+    let minSubnetBits = 0;
+    while (Math.pow(2, minSubnetBits) < r.subnets) minSubnetBits++;
+    let minHostBits = 0;
+    while ((minHostBits <= 1 ? Math.pow(2, minHostBits) : Math.pow(2, minHostBits) - 2) < r.hosts) minHostBits++;
+
+    const valid = [];
+    for (let p = classBits + 1; p <= 30; p++) {
+      const s = p - classBits;
+      const h = 32 - p;
+      const subnetCount = Math.pow(2, s);
+      const hostsPer = h <= 1 ? Math.pow(2, h) : Math.pow(2, h) - 2;
+      if (subnetCount >= r.subnets && hostsPer >= r.hosts) {
+        valid.push({ prefix: p, dotted: intToIp(prefixMask(p)) });
+      }
+    }
+
+    const maxHosts = valid[0];
+    const maxSubnets = valid[valid.length - 1];
+    const maskList = valid.map(v => `${v.dotted} (/${v.prefix})`).join(', ');
+
+    return {
+      q: `${idx + 1}) ${r.net}, need ${r.subnets} subnets, need ${r.hosts} hosts/subnet`,
+      a: `Min subnet bits=${minSubnetBits}, min host bits=${minHostBits}. Masks: ${maskList}. Max subnets -> /${maxSubnets.prefix} (${maxSubnets.dotted}). Max hosts/subnet -> /${maxHosts.prefix} (${maxHosts.dotted}).`,
+      keys: [`/${maxSubnets.prefix}`, `/${maxHosts.prefix}`, String(minSubnetBits), String(minHostBits)]
+    };
+  });
+}
+
+function buildPS5Set() {
+  const items = [
+    ['10.180.10.18', '255.192.0.0'],
+    ['10.200.10.18', '255.224.0.0'],
+    ['10.100.18.18', '255.240.0.0'],
+    ['10.100.18.18', '255.248.0.0'],
+    ['10.150.200.200', '255.252.0.0'],
+    ['10.150.200.200', '255.254.0.0'],
+    ['10.220.100.18', '255.255.0.0'],
+    ['10.220.100.18', '255.255.128.0'],
+    ['172.31.100.100', '255.255.192.0'],
+    ['172.31.100.100', '255.255.224.0'],
+    ['172.31.200.10', '255.255.240.0'],
+    ['172.31.200.10', '255.255.248.0'],
+    ['172.31.50.50', '255.255.252.0'],
+    ['172.31.50.50', '255.255.254.0'],
+    ['172.31.140.14', '255.255.255.0'],
+    ['172.31.140.14', '255.255.255.128'],
+    ['192.168.15.150', '255.255.255.192'],
+    ['192.168.15.150', '255.255.255.224'],
+    ['192.168.100.100', '255.255.255.240'],
+    ['192.168.100.100', '255.255.255.248'],
+    ['192.168.15.230', '255.255.255.252'],
+    ['10.1.1.1', '255.248.0.0'],
+    ['172.16.1.200', '255.255.240.0'],
+    ['172.16.0.200', '255.255.255.192'],
+    ['10.1.1.1', '255.0.0.0']
+  ];
+
+  return items.map(([ip, mask], idx) => {
+    const info = analyzeAddressInSubnet(ip, mask);
+    return {
+      q: `${idx + 1}) ${ip}, mask ${mask}`,
+      a: `network bits=${info.networkBits}, subnet bits=${info.subnetBits}, host bits=${info.hostBits}, hosts/subnet=${info.hostsPerSubnet}, subnets=${info.subnets}, subnet number=${info.subnetNumber}, broadcast=${info.broadcast}, usable range=${info.range}`,
+      keys: [String(info.hostsPerSubnet), info.subnetNumber, info.broadcast]
+    };
+  });
+}
+
+const subnetProblemSets = {
+  ps1: [
+    { q: '255.240.0.0 -> prefix?', a: '/12', keys: ['/12'] },
+    { q: '255.255.192.0 -> prefix?', a: '/18', keys: ['/18'] },
+    { q: '255.255.255.224 -> prefix?', a: '/27', keys: ['/27'] },
+    { q: '255.254.0.0 -> prefix?', a: '/15', keys: ['/15'] },
+    { q: '255.255.248.0 -> prefix?', a: '/21', keys: ['/21'] },
+    { q: '/30 -> dotted decimal?', a: '255.255.255.252', keys: ['255.255.255.252'] },
+    { q: '/25 -> dotted decimal?', a: '255.255.255.128', keys: ['255.255.255.128'] },
+    { q: '/11 -> dotted decimal?', a: '255.224.0.0', keys: ['255.224.0.0'] },
+    { q: '/22 -> dotted decimal?', a: '255.255.252.0', keys: ['255.255.252.0'] },
+    { q: '/24 -> dotted decimal?', a: '255.255.255.0', keys: ['255.255.255.0'] }
+  ],
+  ps2: [
+    { q: '10.55.44.3 (no subnetting)', a: 'Class A, net octets=1, host octets=3, network=10.0.0.0, broadcast=10.255.255.255', keys: ['classa', '10.0.0.0', '10.255.255.255'] },
+    { q: '128.77.6.7 (no subnetting)', a: 'Class B, net octets=2, host octets=2, network=128.77.0.0, broadcast=128.77.255.255', keys: ['classb', '128.77.0.0', '128.77.255.255'] },
+    { q: '192.168.76.54 (no subnetting)', a: 'Class C, net octets=3, host octets=1, network=192.168.76.0, broadcast=192.168.76.255', keys: ['classc', '192.168.76.0', '192.168.76.255'] },
+    { q: '190.190.190.190 (no subnetting)', a: 'Class B, net octets=2, host octets=2, network=190.190.0.0, broadcast=190.190.255.255', keys: ['classb', '190.190.0.0', '190.190.255.255'] },
+    { q: '9.1.1.1 (no subnetting)', a: 'Class A, net octets=1, host octets=3, network=9.0.0.0, broadcast=9.255.255.255', keys: ['classa', '9.0.0.0', '9.255.255.255'] },
+    { q: '200.1.1.1 (no subnetting)', a: 'Class C, net octets=3, host octets=1, network=200.1.1.0, broadcast=200.1.1.255', keys: ['classc', '200.1.1.0', '200.1.1.255'] }
+  ],
+  ps3: [
+    { q: '10.66.5.99, 255.255.254.0', a: 'network bits=8, subnet bits=15, host bits=9, subnets=32768, hosts/subnet=510', keys: ['8', '15', '9', '510'] },
+    { q: '172.16.203.42, 255.255.252.0', a: 'network bits=16, subnet bits=6, host bits=10, subnets=64, hosts/subnet=1022', keys: ['16', '6', '10', '1022'] },
+    { q: '192.168.55.55, 255.255.255.224', a: 'network bits=24, subnet bits=3, host bits=5, subnets=8, hosts/subnet=30', keys: ['24', '3', '5', '30'] },
+    { q: '10.22.55.87/30', a: 'network bits=8, subnet bits=22, host bits=2, subnets=4194304, hosts/subnet=2', keys: ['22', '2', '4194304'] },
+    { q: '172.30.40.166/26', a: 'network bits=16, subnet bits=10, host bits=6, subnets=1024, hosts/subnet=62', keys: ['10', '6', '1024', '62'] },
+    { q: '192.168.203.18/29', a: 'network bits=24, subnet bits=5, host bits=3, subnets=32, hosts/subnet=6', keys: ['5', '3', '32', '6'] }
+  ],
+  ps4: buildPS4Set(),
+  ps5: buildPS5Set()
+};
+
+let showAnswer = false;
+
+function normalizeText(text) {
+  return text.toLowerCase().replace(/\s+/g, '').replace(/[;,]/g, '');
+}
+
+function loadProblemSet() {
+  const setKey = document.getElementById('ps-set').value;
+  const indexSel = document.getElementById('ps-index');
+  indexSel.innerHTML = '';
+
+  subnetProblemSets[setKey].forEach((_, idx) => {
+    const opt = document.createElement('option');
+    opt.value = String(idx);
+    opt.textContent = `Problem ${idx + 1}`;
+    indexSel.appendChild(opt);
+  });
+
+  showAnswer = false;
+  document.getElementById('ps-user-answer').value = '';
+  document.getElementById('ps-check-result').style.display = 'none';
+  showProblemDetails();
+}
+
+function showProblemDetails() {
+  const setKey = document.getElementById('ps-set').value;
+  const idx = Number(document.getElementById('ps-index').value || 0);
+  const item = subnetProblemSets[setKey][idx];
+  document.getElementById('ps-question').innerHTML = `<strong>Pyetja:</strong> ${item.q}`;
+
+  const ans = document.getElementById('ps-answer');
+  if (showAnswer) {
+    ans.style.display = 'block';
+    ans.innerHTML = `<strong>Zgjidhja:</strong> ${item.a}`;
+  } else {
+    ans.style.display = 'none';
+  }
+}
+
+function checkProblemAnswer() {
+  const setKey = document.getElementById('ps-set').value;
+  const idx = Number(document.getElementById('ps-index').value || 0);
+  const item = subnetProblemSets[setKey][idx];
+  const user = normalizeText(document.getElementById('ps-user-answer').value);
+  const result = document.getElementById('ps-check-result');
+
+  if (!user) {
+    result.style.display = 'block';
+    result.innerHTML = 'Shkruaj përgjigjen para kontrollit.';
+    return;
+  }
+
+  const keys = (item.keys || []).map(k => normalizeText(String(k)));
+  const matched = keys.filter(k => user.includes(k)).length;
+  const ratio = keys.length ? matched / keys.length : 0;
+  result.style.display = 'block';
+
+  if (ratio >= 0.75) {
+    result.innerHTML = `✓ Shumë mirë. Key match: ${matched}/${keys.length}`;
+  } else if (ratio >= 0.4) {
+    result.innerHTML = `~ Afër. Key match: ${matched}/${keys.length}. Plotëso edhe disa vlera kyçe.`;
+  } else {
+    result.innerHTML = `✗ Duhet rishikim. Key match: ${matched}/${keys.length}.`;
+  }
+}
+
+function toggleProblemAnswer() {
+  showAnswer = !showAnswer;
+  showProblemDetails();
+}
+
+function cidrRange(cidr) {
+  const [ip, pStr] = cidr.split('/');
+  const p = Number(pStr);
+  const mask = prefixMask(p);
+  const start = ipPartsToInt(parseIp(ip)) & mask;
+  const size = Math.pow(2, 32 - p);
+  return { start, end: start + size - 1, prefix: p };
+}
+
+function overlaps(a, b) {
+  return !(a.end < b.start || b.end < a.start);
+}
+
+function findAvailableSubnet(baseCidr, hostNeed, existingCidrs, pickLargest) {
+  const base = cidrRange(baseCidr);
+  let hostBits = 0;
+  while ((hostBits <= 1 ? Math.pow(2, hostBits) : Math.pow(2, hostBits) - 2) < hostNeed) hostBits++;
+  const prefix = 32 - hostBits;
+  const blockSize = Math.pow(2, 32 - prefix);
+  const existing = existingCidrs.map(cidrRange);
+
+  const starts = [];
+  for (let s = base.start; s + blockSize - 1 <= base.end; s += blockSize) {
+    starts.push(s);
+  }
+  if (pickLargest) starts.reverse();
+
+  for (const start of starts) {
+    const cand = { start, end: start + blockSize - 1, prefix };
+    const bad = existing.some(e => overlaps(cand, e));
+    if (!bad) return cand;
+  }
+  return null;
+}
+
+function solveVlsmCase() {
+  const selected = document.getElementById('vlsm-case').value;
+  const output = document.getElementById('vlsm-result');
+
+  const caseData = selected === '1'
+    ? {
+        base: '172.30.0.0/16',
+        hostNeed: 300,
+        pickLargest: false,
+        existing: [
+          '172.30.34.0/30',
+          '172.30.34.4/30',
+          '172.30.34.8/30',
+          '172.30.0.0/20',
+          '172.30.20.0/22',
+          '172.30.32.0/25',
+          '172.30.34.12/30',
+          '172.30.34.16/30'
+        ]
+      }
+    : {
+        base: '192.168.1.0/24',
+        hostNeed: 13,
+        pickLargest: true,
+        existing: [
+          '192.168.1.192/26',
+          '192.168.1.64/30',
+          '192.168.1.72/30',
+          '192.168.1.76/30',
+          '192.168.1.128/26'
+        ]
+      };
+
+  const best = findAvailableSubnet(caseData.base, caseData.hostNeed, caseData.existing, caseData.pickLargest);
+  output.style.display = 'block';
+
+  if (!best) {
+    output.innerHTML = 'Nuk u gjet subnet i lirë me këto kushte.';
+    return;
+  }
+
+  output.innerHTML = `<strong>Subnet i zgjedhur:</strong> ${intToIp(best.start)}/${best.prefix}<br>
+  <strong>Range:</strong> ${intToIp(best.start)} - ${intToIp(best.end)}<br>
+  <strong>Kriteri:</strong> ${caseData.pickLargest ? 'numerically largest' : 'numerically smallest'} available`;
+}
+
+const flashcardsByLecture = {
+  lect1: [
+    { q: 'Çfarë zgjidh N^2 problem?', a: 'Circuit switching me qendër ul numrin e lidhjeve direkte.' },
+    { q: 'Dallimi LAN dhe WAN?', a: 'LAN mbulim lokal; WAN mbulim i gjerë ndër-rajonal.' },
+    { q: 'Tri use-case kryesore të 5G?', a: 'eMBB, URLLC, mMTC.' },
+    { q: 'Çfarë është layered architecture?', a: 'Ndarja e funksioneve në shtresa me ndërfaqe të qarta.' }
+  ],
+  lect2: [
+    { q: 'Pse HTTP është stateless?', a: 'Serveri nuk ruan state klienti pa mekanizma shtesë.' },
+    { q: 'Cookies përdoren për?', a: 'Session/state tracking dhe personalizim.' },
+    { q: 'DNS porti?', a: '53, zakonisht UDP, por edhe TCP kur nevojitet.' },
+    { q: 'SMTP është push apo pull?', a: 'Push.' }
+  ],
+  lect3: [
+    { q: 'TCP vs UDP në një fjali?', a: 'TCP reliable/ordered; UDP lightweight/pa guarantee.' },
+    { q: 'Çfarë bën ACK number?', a: 'Tregon bajtin tjetër të pritur (cumulative ACK).' },
+    { q: 'Kur përdoret Fast Retransmit?', a: 'Pas 3 duplicate ACK, retransmeton pa pritur timeout.' },
+    { q: 'GBN vs SR?', a: 'GBN retransmeton shumë; SR retransmeton selektivisht.' }
+  ],
+  lect4: [
+    { q: 'Forwarding vs Routing?', a: 'Forwarding vendim lokal; routing llogarit rrugët globale.' },
+    { q: 'NAT përfitimi kryesor?', a: 'Shumë hoste private ndajnë një IP publike.' },
+    { q: 'DHCP 4 hapat?', a: 'Discover, Offer, Request, ACK.' },
+    { q: 'IPv6 pse?', a: 'Adresim shumë më i madh dhe header më i thjeshtë.' }
+  ]
+};
+
+let flashcards = flashcardsByLecture.lect1.slice();
+
+let flashIndex = 0;
+
+function renderFlashcard() {
+  const current = flashcards[flashIndex];
+  document.getElementById('flash-question').textContent = current.q;
+  const answer = document.getElementById('flash-answer');
+  answer.textContent = current.a;
+  answer.classList.remove('visible');
+  document.getElementById('flash-index').textContent = `Karta ${flashIndex + 1} / ${flashcards.length}`;
+}
+
+function toggleFlashAnswer() {
+  document.getElementById('flash-answer').classList.toggle('visible');
+}
+
+function nextFlashcard() {
+  flashIndex = (flashIndex + 1) % flashcards.length;
+  renderFlashcard();
+}
+
+function prevFlashcard() {
+  flashIndex = (flashIndex - 1 + flashcards.length) % flashcards.length;
+  renderFlashcard();
+}
+
+function shuffleFlashcards() {
+  flashcards.sort(() => Math.random() - 0.5);
+  flashIndex = 0;
+  renderFlashcard();
+}
+
+function setFlashLecture(lectureId) {
+  flashcards = (flashcardsByLecture[lectureId] || []).slice();
+  flashIndex = 0;
+  renderFlashcard();
+}
+
+const miniSubnetQuestions = [
+  {
+    q: 'Në 192.168.10.77/26, cili është subnet number?',
+    options: ['192.168.10.0', '192.168.10.64', '192.168.10.128', '192.168.10.192'],
+    correct: '192.168.10.64',
+    exp: 'Mask /26 -> block-size 64. Okteti 77 bie në intervalin 64-127, prandaj subnet është 192.168.10.64.'
+  },
+  {
+    q: 'Për /27, sa hostë të përdorshëm ka një subnet?',
+    options: ['14', '30', '62', '126'],
+    correct: '30',
+    exp: 'Host bits = 32 - 27 = 5, prandaj hostë = 2^5 - 2 = 30.'
+  },
+  {
+    q: 'Në 10.50.14.200/20, cili është broadcast address?',
+    options: ['10.50.15.255', '10.50.31.255', '10.50.255.255', '10.50.16.255'],
+    correct: '10.50.15.255',
+    exp: '/20 -> mask 255.255.240.0. Blloku në oktetin e tretë është 0-15, broadcast = 10.50.15.255.'
+  }
+];
+
+let miniSubnetIndex = 0;
+
+function renderMiniSubnetQuestion() {
+  const item = miniSubnetQuestions[miniSubnetIndex];
+  document.getElementById('mini-subnet-q').textContent = item.q;
+  const wrap = document.getElementById('mini-subnet-options');
+  wrap.innerHTML = '';
+
+  item.options.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'ghost-btn';
+    btn.style.marginRight = '8px';
+    btn.style.marginTop = '8px';
+    btn.textContent = opt;
+    btn.onclick = () => {
+      const ok = opt === item.correct;
+      const box = document.getElementById('mini-subnet-feedback');
+      box.style.display = 'block';
+      box.innerHTML = `${ok ? '✓ Saktë' : '✗ Gabim'} — ${item.exp}`;
+    };
+    wrap.appendChild(btn);
+  });
+
+  document.getElementById('mini-subnet-feedback').style.display = 'none';
+}
+
+function nextMiniSubnetQuestion() {
+  miniSubnetIndex = (miniSubnetIndex + 1) % miniSubnetQuestions.length;
+  renderMiniSubnetQuestion();
+}
+
+attachDefinitionTooltips();
+renderFlashcard();
+subnetAnimSteps = buildSubnetSteps(subnetAnimationExample.ip, subnetAnimationExample.prefix);
+document.getElementById('anim-target').textContent = `${subnetAnimationExample.ip}/${subnetAnimationExample.prefix}`;
+resetSubnetAnimation();
+generateSubnetPractice();
+loadProblemSet();
+applyQuizVersion('A');
+resetPacketCheckpoint('udp');
+resetPacketCheckpoint('tcp');
+renderChecksumBoard();
+resetChecksumCheckpoint();
+resetChecksumQuiz();
+renderMiniSubnetQuestion();
+updateExamUI();
+updateScore();
+</script>
+</body>
+</html>
