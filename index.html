@@ -201,11 +201,16 @@
     border-radius: 10px;
     padding: 16px 20px;
     max-width: 340px;
+    width: min(340px, calc(100vw - 24px));
+    max-height: min(70vh, 420px);
     font-size: 0.88rem;
     line-height: 1.6;
     color: var(--text);
     box-shadow: 0 8px 32px rgba(0,0,0,0.6), 0 0 0 1px rgba(0,212,255,0.1);
-    pointer-events: none;
+    pointer-events: auto;
+    overflow: auto;
+    overflow-wrap: anywhere;
+    word-break: break-word;
     animation: fadeInTip 0.15s ease;
   }
   .tooltip-box.visible { display: block; }
@@ -931,7 +936,12 @@
     }
 
     .tooltip-box {
-      max-width: min(88vw, 340px);
+      max-width: min(92vw, 340px);
+      width: min(92vw, 340px);
+      max-height: min(62vh, 360px);
+      padding: 14px;
+      font-size: 0.84rem;
+      line-height: 1.45;
     }
   }
 
@@ -2681,7 +2691,7 @@ function attachDefinitionTooltips() {
   });
 
   const closeOnOutsideTap = function(e) {
-    if (!e.target.closest('.def[data-tip]')) hideTooltip();
+    if (!e.target.closest('.def[data-tip]') && !e.target.closest('#tooltip-box')) hideTooltip();
   };
 
   document.addEventListener('click', closeOnOutsideTap);
@@ -2693,12 +2703,20 @@ function attachDefinitionTooltips() {
 
 function positionTooltip(e) {
   const pad = 16;
-  const tw = 340;
+  const viewportWidth = window.visualViewport ? window.visualViewport.width : window.innerWidth;
+  const viewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+  const maxWidth = Math.min(340, viewportWidth - (pad * 2));
+
+  tooltipBox.style.width = maxWidth + 'px';
+
+  const tw = tooltipBox.offsetWidth || maxWidth;
   const th = tooltipBox.offsetHeight || 120;
   let x = e.clientX + pad;
   let y = e.clientY + pad;
-  if (x + tw > window.innerWidth - pad) x = e.clientX - tw - pad;
-  if (y + th > window.innerHeight - pad) y = e.clientY - th - pad;
+  if (x + tw > viewportWidth - pad) x = e.clientX - tw - pad;
+  if (y + th > viewportHeight - pad) y = e.clientY - th - pad;
+  if (x < pad) x = pad;
+  if (y < pad) y = pad;
   tooltipBox.style.left = x + 'px';
   tooltipBox.style.top  = y + 'px';
 }
