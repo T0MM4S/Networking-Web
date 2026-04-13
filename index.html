@@ -29,6 +29,99 @@
     font-family: 'DM Sans', sans-serif;
     line-height: 1.7;
     overflow-x: hidden;
+    position: relative;
+  }
+
+  .live-code-bg {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .live-code-vignette {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 10% 12%, rgba(0, 212, 255, 0.09), transparent 30%),
+      radial-gradient(circle at 86% 78%, rgba(16, 185, 129, 0.08), transparent 32%),
+      linear-gradient(180deg, rgba(7, 10, 18, 0.18) 0%, rgba(7, 10, 18, 0.58) 100%);
+  }
+
+  .live-code-rain {
+    position: absolute;
+    inset: 0;
+  }
+
+  .live-code-glyph {
+    position: absolute;
+    top: -26vh;
+    font-family: 'IBM Plex Mono', monospace;
+    color: rgba(148, 163, 184, 0.28);
+    text-shadow: 0 0 10px rgba(0, 212, 255, 0.08);
+    white-space: nowrap;
+    animation-name: codeFall;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+
+  @keyframes codeFall {
+    from { transform: translateY(-28vh); }
+    to { transform: translateY(130vh); }
+  }
+
+  .live-code-wall {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 10px;
+    padding: 10px;
+    opacity: 0.3;
+    mask-image: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.8) 15%, rgba(0,0,0,0.9) 85%, transparent 100%);
+  }
+
+  .live-code-col {
+    position: relative;
+    overflow: hidden;
+    border-left: 1px solid rgba(0, 212, 255, 0.09);
+  }
+
+  .live-code-scroll {
+    position: absolute;
+    left: 8px;
+    right: 8px;
+    top: -50%;
+    animation: codeWallScroll 24s linear infinite;
+  }
+
+  .live-code-col.alt .live-code-scroll {
+    animation-direction: reverse;
+    animation-duration: 28s;
+  }
+
+  .live-code-line {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: rgba(203, 213, 225, 0.42);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 7px;
+  }
+
+  @keyframes codeWallScroll {
+    from { transform: translateY(-10%); }
+    to { transform: translateY(55%); }
+  }
+
+  header,
+  .nav,
+  .container,
+  footer {
+    position: relative;
+    z-index: 2;
   }
 
   /* HEADER */
@@ -529,6 +622,56 @@
     padding: 10px 12px;
     background: var(--surface2);
     font-size: 0.9rem;
+  }
+
+  .subnet-analytics {
+    margin-top: 10px;
+    background: #0c1424;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px;
+  }
+
+  .subnet-analytics-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  .subnet-analytic-chip {
+    margin-bottom: 8px;
+  }
+
+  .subnet-bin-row {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.81rem;
+    margin-bottom: 6px;
+    color: #cbd5e1;
+    white-space: nowrap;
+    overflow-x: auto;
+    padding-bottom: 3px;
+  }
+
+  .subnet-bin-row .lbl {
+    color: var(--muted);
+    display: inline-block;
+    min-width: 62px;
+  }
+
+  .subnet-bin-row .net {
+    color: var(--accent);
+  }
+
+  .subnet-bin-row .host {
+    color: #fda4af;
+  }
+
+  .subnet-bin-row .sep {
+    color: var(--accent4);
+    padding: 0 6px;
   }
 
   .bin-line {
@@ -1044,6 +1187,15 @@
     .def[data-tip]::after {
       content: 'Tap per detaje';
     }
+
+    .live-code-wall {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      opacity: 0.24;
+    }
+
+    .live-code-line {
+      font-size: 10px;
+    }
   }
 
   @media (hover: none), (pointer: coarse) {
@@ -1064,9 +1216,26 @@
       font-size: 0.83rem;
     }
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    .live-code-glyph {
+      animation: none;
+      opacity: 0.14;
+    }
+
+    .live-code-scroll {
+      animation: none;
+    }
+  }
 </style>
 </head>
 <body>
+
+<div class="live-code-bg" aria-hidden="true">
+  <div class="live-code-vignette"></div>
+  <div class="live-code-rain" id="live-code-rain"></div>
+  <div class="live-code-wall" id="live-code-wall"></div>
+</div>
 
 <header>
   <div class="badge">📡 ICT BSc — Sem IV — 2026</div>
@@ -2213,6 +2382,14 @@ Mungon (ndaj IPv4): Checksum, Fragmentation, Options
       <div class="card-label" style="color:var(--accent4)">Animacion Hap-Pas-Hapi</div>
       <h2>Si e zgjidhim një subnet?</h2>
       <div class="def">Shembull animativ: <strong id="anim-target">192.168.45.173/27</strong>. Kliko play për të parë rrjedhën logjike nga maska deri te host range.</div>
+      <div class="practice-grid" style="margin-top:10px">
+        <input class="subnet-input" id="subnet-analytic-target" placeholder="Shkruaj IP/prefix, p.sh. 172.16.5.130/26" value="192.168.45.173/27">
+        <button class="ghost-btn" onclick="applySubnetAnalyticTarget()">🧮 Përdor këtë rast</button>
+      </div>
+      <div class="quiz-actions" style="margin-top:6px">
+        <button class="ghost-btn" onclick="randomizeSubnetAnalyticTarget()">🎲 Rast i rastësishëm</button>
+      </div>
+      <div class="small-muted" id="subnet-analytic-feedback">Vendos një IP/prefix dhe paneli analitik do të rifreskohet menjëherë.</div>
       <div class="quiz-actions" style="margin-top:12px">
         <button class="ghost-btn" onclick="playSubnetAnimation()">▶️ Play</button>
         <button class="ghost-btn" onclick="nextSubnetStep()">⏭️ Next Step</button>
@@ -2223,6 +2400,15 @@ Mungon (ndaj IPv4): Checksum, Fragmentation, Options
           <div class="step-label" id="subnet-step-title">Hapi 1</div>
           <div id="subnet-step-content">Kliko Play për të nisur animacionin.</div>
         </div>
+      </div>
+
+      <div class="subnet-analytics">
+        <div class="subnet-analytics-title">Subnet Analitik (Bit me Bit)</div>
+        <div class="step-chip subnet-analytic-chip" id="subnet-analytic-chip">Analitik Checkpoint: 1/6</div>
+        <div class="subnet-bin-row" id="subnet-analytic-ip"></div>
+        <div class="subnet-bin-row" id="subnet-analytic-mask"></div>
+        <div class="subnet-bin-row" id="subnet-analytic-net"></div>
+        <div class="subnet-bin-row" id="subnet-analytic-broadcast"></div>
       </div>
     </div>
 
@@ -3093,7 +3279,57 @@ function toBinaryOctets(ip) {
   return parsed.map(o => o.toString(2).padStart(8, '0')).join('.');
 }
 
-const subnetAnimationExample = {
+function toBinary32(value) {
+  return (value >>> 0).toString(2).padStart(32, '0');
+}
+
+function splitBinaryByPrefix(binary32, prefix) {
+  return {
+    net: binary32.slice(0, prefix),
+    host: binary32.slice(prefix)
+  };
+}
+
+function renderSubnetBinRow(elId, label, value32, prefix, forceHostOnes) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  const split = splitBinaryByPrefix(value32, prefix);
+  const hostBits = forceHostOnes ? '1'.repeat(32 - prefix) : split.host;
+  el.innerHTML = `<span class="lbl">${label}</span><span class="net">${split.net}</span><span class="sep">|</span><span class="host">${hostBits}</span>`;
+}
+
+function renderSubnetAnalytics() {
+  const { ip, prefix } = subnetAnimationExample;
+  const ipParts = parseIp(ip);
+  const ipInt = ipPartsToInt(ipParts);
+  const mask = prefixMask(prefix);
+  const net = ipInt & mask;
+  const broad = (net | (~mask >>> 0)) >>> 0;
+  const chip = document.getElementById('subnet-analytic-chip');
+  if (chip) {
+    chip.textContent = `Analitik Checkpoint: ${subnetAnimIndex + 1}/${subnetAnimSteps.length}`;
+  }
+
+  const ipBin = toBinary32(ipInt);
+  const maskBin = toBinary32(mask);
+  const netBin = toBinary32(net);
+  const broadBin = toBinary32(broad);
+
+  renderSubnetBinRow('subnet-analytic-ip', 'IP', ipBin, prefix, false);
+  renderSubnetBinRow('subnet-analytic-mask', 'MASK', maskBin, prefix, false);
+  renderSubnetBinRow('subnet-analytic-net', 'NET', netBin, prefix, false);
+
+  if (subnetAnimIndex >= 4) {
+    renderSubnetBinRow('subnet-analytic-broadcast', 'BCAST', broadBin, prefix, true);
+  } else {
+    const bcastEl = document.getElementById('subnet-analytic-broadcast');
+    if (bcastEl) {
+      bcastEl.innerHTML = '<span class="lbl">BCAST</span><span class="small-muted">Shfaqet nga Hapi 5 (host bitet = 1)</span>';
+    }
+  }
+}
+
+let subnetAnimationExample = {
   ip: '192.168.45.173',
   prefix: 27
 };
@@ -3139,10 +3375,59 @@ function buildSubnetSteps(ip, prefix) {
   ];
 }
 
+function parseSubnetTargetInput(raw) {
+  const clean = raw.trim();
+  const parts = clean.split('/');
+  if (parts.length !== 2) return null;
+  const ip = parts[0].trim();
+  const prefix = Number(parts[1].trim());
+  if (!parseIp(ip)) return null;
+  if (!Number.isInteger(prefix) || prefix < 0 || prefix > 32) return null;
+  return { ip, prefix };
+}
+
+function setSubnetAnimationExample(ip, prefix, message) {
+  subnetAnimationExample = { ip, prefix };
+  subnetAnimSteps = buildSubnetSteps(ip, prefix);
+  document.getElementById('anim-target').textContent = `${ip}/${prefix}`;
+  const input = document.getElementById('subnet-analytic-target');
+  if (input) input.value = `${ip}/${prefix}`;
+  const feedback = document.getElementById('subnet-analytic-feedback');
+  if (feedback) {
+    feedback.textContent = message || `U ngarkua rasti ${ip}/${prefix}.`;
+  }
+  resetSubnetAnimation();
+}
+
+function applySubnetAnalyticTarget() {
+  const raw = document.getElementById('subnet-analytic-target').value;
+  const parsed = parseSubnetTargetInput(raw);
+  const feedback = document.getElementById('subnet-analytic-feedback');
+
+  if (!parsed) {
+    feedback.textContent = 'Format i pavlefshëm. Përdor IP/prefix, p.sh. 172.16.5.130/26.';
+    return;
+  }
+
+  setSubnetAnimationExample(parsed.ip, parsed.prefix, `Rasti u aplikua: ${parsed.ip}/${parsed.prefix}.`);
+}
+
+function randomizeSubnetAnalyticTarget() {
+  const ranges = [10, 172, 192];
+  const first = ranges[Math.floor(Math.random() * ranges.length)];
+  let second = Math.floor(Math.random() * 256);
+  if (first === 172) second = 16 + Math.floor(Math.random() * 16);
+  if (first === 192) second = 168;
+  const ip = [first, second, Math.floor(Math.random() * 256), Math.floor(Math.random() * 256)].join('.');
+  const prefix = 16 + Math.floor(Math.random() * 15);
+  setSubnetAnimationExample(ip, prefix, `Rast i ri: ${ip}/${prefix}.`);
+}
+
 function renderSubnetStep() {
   const step = subnetAnimSteps[subnetAnimIndex];
   document.getElementById('subnet-step-title').textContent = step.t;
   document.getElementById('subnet-step-content').innerHTML = step.c;
+  renderSubnetAnalytics();
 }
 
 function playSubnetAnimation() {
@@ -4153,11 +4438,90 @@ function nextMiniSubnetQuestion() {
   renderMiniSubnetQuestion();
 }
 
+const liveTerminalCommands = [
+  'tcpdump -i eth0 port 53',
+  'netstat -an | find "ESTABLISHED"',
+  'ping 8.8.8.8 -n 4',
+  'tracert 1.1.1.1',
+  'python checksum_demo.py --step',
+  'ipconfig /all',
+  'route print',
+  'sudo nmap -sS 192.168.1.0/24',
+  'curl -I https://example.com',
+  'wireshark --capture udp',
+  'awk "{print $1,$2}" packets.log',
+  'dig +short github.com'
+];
+
+let liveCodeResizeTimer = null;
+
+function spawnLiveCodeGlyphs() {
+  const rain = document.getElementById('live-code-rain');
+  if (!rain) return;
+
+  rain.innerHTML = '';
+  const count = window.innerWidth < 700 ? 14 : 26;
+
+  for (let i = 0; i < count; i += 1) {
+    const glyph = document.createElement('div');
+    glyph.className = 'live-code-glyph';
+    glyph.textContent = liveTerminalCommands[Math.floor(Math.random() * liveTerminalCommands.length)];
+    glyph.style.left = `${Math.random() * 100}%`;
+    glyph.style.animationDuration = `${11 + Math.random() * 16}s`;
+    glyph.style.animationDelay = `${-Math.random() * 18}s`;
+    glyph.style.fontSize = `${10 + Math.random() * 3}px`;
+    glyph.style.opacity = (0.16 + Math.random() * 0.24).toFixed(2);
+    rain.appendChild(glyph);
+  }
+}
+
+function buildLiveCodeWall() {
+  const wall = document.getElementById('live-code-wall');
+  if (!wall) return;
+
+  const cols = window.innerWidth < 640 ? 2 : (window.innerWidth < 1024 ? 4 : 6);
+  wall.style.gridTemplateColumns = `repeat(${cols}, minmax(0, 1fr))`;
+  wall.innerHTML = '';
+
+  for (let i = 0; i < cols; i += 1) {
+    const col = document.createElement('div');
+    col.className = `live-code-col ${i % 2 === 0 ? 'alt' : ''}`;
+
+    const scroll = document.createElement('div');
+    scroll.className = 'live-code-scroll';
+    const lineCount = 34;
+    for (let j = 0; j < lineCount; j += 1) {
+      const line = document.createElement('div');
+      line.className = 'live-code-line';
+      const cmd = liveTerminalCommands[(i * 7 + j) % liveTerminalCommands.length];
+      line.textContent = `> ${cmd}`;
+      scroll.appendChild(line);
+    }
+
+    col.appendChild(scroll);
+    wall.appendChild(col);
+  }
+}
+
+function initLiveCodingBackground() {
+  if (document.body.dataset.liveBgInit === '1') return;
+  document.body.dataset.liveBgInit = '1';
+
+  spawnLiveCodeGlyphs();
+  buildLiveCodeWall();
+  window.addEventListener('resize', () => {
+    clearTimeout(liveCodeResizeTimer);
+    liveCodeResizeTimer = setTimeout(() => {
+      spawnLiveCodeGlyphs();
+      buildLiveCodeWall();
+    }, 150);
+  });
+}
+
+initLiveCodingBackground();
 attachDefinitionTooltips();
 renderFlashcard();
-subnetAnimSteps = buildSubnetSteps(subnetAnimationExample.ip, subnetAnimationExample.prefix);
-document.getElementById('anim-target').textContent = `${subnetAnimationExample.ip}/${subnetAnimationExample.prefix}`;
-resetSubnetAnimation();
+setSubnetAnimationExample(subnetAnimationExample.ip, subnetAnimationExample.prefix, 'Rasti fillestar u ngarkua.');
 generateSubnetPractice();
 loadProblemSet();
 applyQuizVersion('A');
