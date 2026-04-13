@@ -2399,7 +2399,14 @@ function toggleAcc(header) {
 const tooltipBox = document.getElementById('tooltip-box');
 const tooltipTitle = document.getElementById('tooltip-title');
 const tooltipContent = document.getElementById('tooltip-content');
-const isTouchDevice = window.matchMedia('(hover: none), (pointer: coarse)').matches;
+const isTouchDevice =
+  window.matchMedia('(hover: none), (pointer: coarse)').matches ||
+  'ontouchstart' in window ||
+  navigator.maxTouchPoints > 0;
+
+function hideTooltip() {
+  tooltipBox.classList.remove('visible');
+}
 
 // Apply tooltips to key definitions after DOM load
 const tipData = [
@@ -2646,7 +2653,7 @@ function attachDefinitionTooltips() {
         e.stopPropagation();
         const alreadyVisible = tooltipBox.classList.contains('visible') && tooltipContent.innerHTML === this.getAttribute('data-tip');
         if (alreadyVisible) {
-          tooltipBox.classList.remove('visible');
+          hideTooltip();
           return;
         }
         tooltipTitle.textContent = this.getAttribute('data-tip-title') || 'Detaje';
@@ -2669,15 +2676,19 @@ function attachDefinitionTooltips() {
     });
     el.addEventListener('mousemove', positionTooltip);
     el.addEventListener('mouseleave', function() {
-      tooltipBox.classList.remove('visible');
+      hideTooltip();
     });
   });
 
-  if (isTouchDevice) {
-    document.addEventListener('click', function() {
-      tooltipBox.classList.remove('visible');
-    });
-  }
+  const closeOnOutsideTap = function(e) {
+    if (!e.target.closest('.def[data-tip]')) hideTooltip();
+  };
+
+  document.addEventListener('click', closeOnOutsideTap);
+  document.addEventListener('touchstart', closeOnOutsideTap, { passive: true });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') hideTooltip();
+  });
 }
 
 function positionTooltip(e) {
