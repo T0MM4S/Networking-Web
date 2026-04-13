@@ -1228,13 +1228,13 @@
       bottom: 10px;
     }
 
+    .live-code-rain,
     .live-code-wall {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      opacity: 0.24;
+      display: none;
     }
 
-    .live-code-line {
-      font-size: 10px;
+    .live-code-vignette {
+      background: linear-gradient(180deg, rgba(7, 10, 18, 0.28) 0%, rgba(7, 10, 18, 0.52) 100%);
     }
   }
 
@@ -4649,6 +4649,15 @@ function buildLiveCodeWall() {
 function initLiveCodingBackground() {
   if (document.body.dataset.liveBgInit === '1') return;
   document.body.dataset.liveBgInit = '1';
+
+  const isMobilePerfMode = window.matchMedia('(max-width: 600px)').matches;
+  if (isMobilePerfMode) {
+    const rain = document.getElementById('live-code-rain');
+    const wall = document.getElementById('live-code-wall');
+    if (rain) rain.innerHTML = '';
+    if (wall) wall.innerHTML = '';
+    return;
+  }
 
   spawnLiveCodeGlyphs();
   buildLiveCodeWall();
