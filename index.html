@@ -996,6 +996,10 @@
     justify-content: center;
     z-index: 99999;
     padding: 20px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+    overscroll-behavior: contain;
   }
 
   .modal.open {
@@ -1009,6 +1013,9 @@
     border-radius: 14px;
     padding: 18px;
     box-shadow: 0 14px 40px rgba(0,0,0,0.45);
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .modal-title {
@@ -1220,6 +1227,15 @@
 
     .def[data-tip]::after {
       content: 'Tap per detaje';
+    }
+
+    .modal {
+      align-items: flex-start;
+      padding: 10px;
+    }
+
+    .modal-card {
+      max-height: calc(100dvh - 20px);
     }
 
     .report-return-btn {
@@ -3289,6 +3305,7 @@ function buildWrongAnswerStudyList(wrongIds) {
 function openQuizModal() {
   const modal = document.getElementById('quiz-result-modal');
   const summary = document.getElementById('quiz-modal-summary');
+  const card = modal ? modal.querySelector('.modal-card') : null;
   const activeIds = getActiveQuestionIds();
   const answeredIds = activeIds.filter(id => quizState[id]);
   const correctIds = activeIds.filter(id => {
@@ -3316,6 +3333,8 @@ function openQuizModal() {
   <ul class="list-lite">${tips.map(t => `<li>${t}</li>`).join('')}</ul>
   ${targetedStudy}`;
 
+  if (modal) modal.scrollTop = 0;
+  if (card) card.scrollTop = 0;
   modal.classList.add('open');
 }
 
