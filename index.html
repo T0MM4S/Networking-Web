@@ -224,6 +224,12 @@
   }
   .card:hover { border-color: rgba(0,212,255,0.2); }
 
+  .study-focus {
+    border-color: rgba(0,212,255,0.58) !important;
+    box-shadow: 0 0 0 2px rgba(0,212,255,0.18), 0 8px 30px rgba(0,0,0,0.26);
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+
   .card-label {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 10px;
@@ -485,6 +491,34 @@
   .ghost-btn:hover {
     border-color: rgba(0,212,255,0.35);
     color: var(--accent);
+  }
+
+  .report-return-btn {
+    position: fixed;
+    right: 18px;
+    bottom: 18px;
+    z-index: 99998;
+    display: none;
+    background: rgba(12, 20, 36, 0.94);
+    border: 1px solid rgba(0,212,255,0.35);
+    color: var(--accent);
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+  }
+
+  .report-return-btn:hover {
+    border-color: rgba(0,212,255,0.55);
+    color: #9be7ff;
+  }
+
+  .report-return-btn.visible {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
   }
 
   .hover-note {
@@ -1186,6 +1220,12 @@
 
     .def[data-tip]::after {
       content: 'Tap per detaje';
+    }
+
+    .report-return-btn {
+      left: 10px;
+      right: auto;
+      bottom: 10px;
     }
 
     .live-code-wall {
@@ -2513,6 +2553,8 @@ Mungon (ndaj IPv4): Checksum, Fragmentation, Options
   </div>
 </div>
 
+<button class="report-return-btn" id="report-return-btn" onclick="returnToFinalReport()">↩ Kthehu te Raporti Final</button>
+
 <!-- ========== CHEAT SHEET ========== -->
 <div id="cheatsheet" class="section">
   <div class="section-title"><span class="icon">⚡</span> Cheat Sheet — Porta, Protokolle, Formulat</div>
@@ -2643,7 +2685,8 @@ function showSection(id, btn) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-  btn.classList.add('active');
+  const activeBtn = btn || Array.from(document.querySelectorAll('.nav-tab')).find(b => (b.getAttribute('onclick') || '').includes(`'${id}'`));
+  if (activeBtn) activeBtn.classList.add('active');
 }
 
 function toggleAcc(header) {
@@ -3147,6 +3190,102 @@ function buildImprovementTips(wrongIds) {
   return tips;
 }
 
+const quizReviewMap = {
+  q1: { section: 'lect1', sectionName: 'Leksion 1', topic: 'N² Problem dhe Circuit Switching', keyword: 'Problemi N²' },
+  q2: { section: 'lect2', sectionName: 'Leksion 2', topic: 'HTTP stateless dhe cookies', keyword: 'Cookies' },
+  q3: { section: 'lect2', sectionName: 'Leksion 2', topic: 'DNS hierarchy dhe query model', keyword: 'Hierarkia e Serverëve DNS' },
+  q4: { section: 'lect3', sectionName: 'Leksion 3', topic: 'TCP 4-tuple demultiplexing', keyword: 'TCP Demultiplexing' },
+  q5: { section: 'lect2', sectionName: 'Leksion 2', topic: 'HTTP/2 dhe frame multiplexing', keyword: 'HTTP/2 dhe HTTP/3' },
+  q6: { section: 'lect3', sectionName: 'Leksion 3', topic: 'TCP RTT dhe Timeout formula', keyword: 'TCP Round Trip Time (RTT) dhe Timeout' },
+  q7: { section: 'lect4', sectionName: 'Leksion 4', topic: 'IPv6 dallimet nga IPv4', keyword: 'IPv6' },
+  q8: { section: 'lect3', sectionName: 'Leksion 3', topic: 'SMTP karakteristikat kryesore', keyword: 'Simple Mail Transfer Protocol' },
+  q9: { section: 'lect3', sectionName: 'Leksion 3', topic: 'GBN vs SR krahasimi', keyword: 'Go-Back-N (GBN)' },
+  q10: { section: 'lect4', sectionName: 'Leksion 4', topic: 'DHCP 4 fazat', keyword: 'DHCP — Dynamic Host Configuration Protocol' },
+  q11: { section: 'lect2', sectionName: 'Leksion 2', topic: 'CDN dhe DASH', keyword: 'DASH & CDN' },
+  q12: { section: 'lect4', sectionName: 'Leksion 4', topic: 'NAT mekanizmi dhe arsyeja', keyword: 'NAT — Network Address Translation' },
+  q13: { section: 'lect4', sectionName: 'Leksion 4', topic: 'UDP demultiplexing me destination port', keyword: 'UDP Demultiplexing' },
+  q14: { section: 'lect3', sectionName: 'Leksion 3', topic: 'rdt3.0 dhe timeout/retransmit', keyword: 'rdt3.0' },
+  q15: { section: 'lect1', sectionName: 'Leksion 1', topic: '5G use-cases (eMBB, URLLC, mMTC)', keyword: '5G — Tri Rastet e Përdorimit' }
+};
+
+let reportReturnState = { enabled: false };
+
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function getQuestionTextById(questionId) {
+  const q = document.getElementById(questionId);
+  const p = q ? q.querySelector('p') : null;
+  if (!p) return questionId;
+  return p.textContent.replace(/^\d+\.\s*/, '').trim();
+}
+
+function focusStudyArea(sectionId, keyword) {
+  const section = document.getElementById(sectionId);
+  if (!section) return;
+
+  let target = null;
+  if (keyword) {
+    const candidates = section.querySelectorAll('h2, h3, .def, li, td, .formula, p');
+    const low = keyword.toLowerCase();
+    target = Array.from(candidates).find(el => (el.textContent || '').toLowerCase().includes(low)) || null;
+  }
+  if (!target) target = section.querySelector('.card');
+  if (!target) return;
+
+  const card = target.closest('.card') || target;
+  card.classList.add('study-focus');
+  card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  setTimeout(() => card.classList.remove('study-focus'), 2200);
+}
+
+function toggleReportReturnButton(show) {
+  const btn = document.getElementById('report-return-btn');
+  if (!btn) return;
+  btn.classList.toggle('visible', !!show);
+}
+
+function goToReviewSpot(questionId) {
+  const ref = quizReviewMap[questionId];
+  if (!ref) return;
+  reportReturnState.enabled = true;
+  toggleReportReturnButton(true);
+  closeQuizModal();
+  showSection(ref.section);
+  setTimeout(() => focusStudyArea(ref.section, ref.keyword), 70);
+}
+
+function returnToFinalReport() {
+  if (!reportReturnState.enabled) return;
+  showSection('quiz');
+  openQuizModal();
+  reportReturnState.enabled = false;
+  toggleReportReturnButton(false);
+}
+
+function buildWrongAnswerStudyList(wrongIds) {
+  if (!wrongIds.length) return '';
+
+  const rows = wrongIds.map(id => {
+    const ref = quizReviewMap[id];
+    if (!ref) return '';
+    const qText = escapeHtml(getQuestionTextById(id));
+    return `<div style="margin-top:10px; border:1px solid var(--border); border-radius:8px; padding:10px; background:var(--surface2)">
+      <div><strong>${id.toUpperCase()}</strong> — ${qText}</div>
+      <div class="small-muted" style="margin-top:6px">Rishiko: <strong>${ref.sectionName}</strong> · ${ref.topic}</div>
+      <div style="margin-top:8px"><button class="ghost-btn" onclick="goToReviewSpot('${id}')">Shko te seksioni</button></div>
+    </div>`;
+  }).join('');
+
+  return `<div style="margin-top:14px"><strong>Ku të shikosh për secilën përgjigje të pasaktë:</strong>${rows}</div>`;
+}
+
 function openQuizModal() {
   const modal = document.getElementById('quiz-result-modal');
   const summary = document.getElementById('quiz-modal-summary');
@@ -3165,6 +3304,7 @@ function openQuizModal() {
   else if (pct >= 50) readiness = 'Mesatar';
 
   const tips = buildImprovementTips(wrongIds);
+  const targetedStudy = buildWrongAnswerStudyList(wrongIds);
   summary.innerHTML = `
   <div class="dash-grid">
     <div class="dash-item"><div class="dash-k">Niveli i gatishmërisë</div><div class="dash-v">${readiness}</div></div>
@@ -3173,7 +3313,8 @@ function openQuizModal() {
     <div class="dash-item"><div class="dash-k">Saktësi</div><div class="dash-v">${pct}%</div></div>
   </div>
   <div style="margin-top:12px"><strong>Si të përmirësohen gabimet:</strong></div>
-  <ul class="list-lite">${tips.map(t => `<li>${t}</li>`).join('')}</ul>`;
+  <ul class="list-lite">${tips.map(t => `<li>${t}</li>`).join('')}</ul>
+  ${targetedStudy}`;
 
   modal.classList.add('open');
 }
@@ -3246,6 +3387,8 @@ function resetQuiz() {
   document.querySelectorAll('.quiz-check').forEach(c => { c.style.display = 'none'; c.className = 'quiz-check'; });
   document.getElementById('quiz-feedback').style.display = 'none';
   closeQuizModal();
+  reportReturnState.enabled = false;
+  toggleReportReturnButton(false);
   applyQuizVersion(currentQuizVersion);
 }
 
